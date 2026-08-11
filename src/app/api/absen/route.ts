@@ -119,7 +119,7 @@ export async function POST(request: Request) {
       const localTimeDate = new Date();
       localTimeDate.setMinutes(localTimeDate.getMinutes() - localTimeDate.getTimezoneOffset());
 
-      await prisma.presensi.update({
+      await prisma.presensi.updateMany({
         where: { id: existing.id },
         data: {
           tanggal_keluar: new Date(),

@@ -36,7 +36,7 @@ export async function getStatusPresensiHariIni() {
     }
 
     // Format time: HH:mm
-    const formatTime = (dateStr: Date | null) => {
+    const formatTime = (dateStr: Date | null | undefined) => {
       if (!dateStr) return null;
       const d = new Date(dateStr);
       // Prisma mengembalikan kolom db.Time sebagai objek Date dalam zona waktu UTC.
@@ -64,10 +64,10 @@ export async function getStatusPresensiHariIni() {
 
     return {
       status: status,
-      jam_masuk: formatTime(regular?.jam_masuk as Date | null),
-      jam_keluar: formatTime(regular?.jam_keluar as Date | null),
-      jam_masuk_lembur: formatTime(lembur?.jam_masuk as Date | null),
-      jam_keluar_lembur: formatTime(lembur?.jam_keluar as Date | null)
+      jam_masuk: formatTime(regular?.jam_masuk),
+      jam_keluar: formatTime(regular?.jam_keluar),
+      jam_masuk_lembur: formatTime(lembur?.jam_masuk),
+      jam_keluar_lembur: formatTime(lembur?.jam_keluar)
     };
 
   } catch (error) {

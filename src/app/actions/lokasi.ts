@@ -20,8 +20,8 @@ export async function getLokasiPresensi() {
   if (!lokasi) return null;
 
   return {
-    latitude: parseFloat(lokasi.latitude),
-    longitude: parseFloat(lokasi.longitude),
+    latitude: parseFloat(lokasi.latitude ?? "0"),
+    longitude: parseFloat(lokasi.longitude ?? "0"),
     radius: lokasi.radius
   };
 }

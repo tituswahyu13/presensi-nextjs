@@ -17,7 +17,7 @@ export default function PegawaiDashboard() {
   const [locationName, setLocationName] = useState<string>("Sedang mencari lokasi Anda...");
   const [locationCoords, setLocationCoords] = useState<{lat: number, lng: number} | null>(null);
   const [officeLocation, setOfficeLocation] = useState<{lat: number, lng: number, radius: number} | null>(null);
-  const [statusHariIni, setStatusHariIni] = useState<{status: string, jam_masuk: string | null, jam_keluar: string | null} | null>(null);
+  const [statusHariIni, setStatusHariIni] = useState<{status: string, jam_masuk: string | null, jam_keluar: string | null, jam_masuk_lembur: string | null, jam_keluar_lembur: string | null} | null>(null);
 
   useEffect(() => {
     // Fetch Status Presensi
@@ -31,7 +31,7 @@ export default function PegawaiDashboard() {
         setOfficeLocation({
           lat: data.latitude,
           lng: data.longitude,
-          radius: data.radius
+          radius: data.radius ?? 50
         });
       }
     });

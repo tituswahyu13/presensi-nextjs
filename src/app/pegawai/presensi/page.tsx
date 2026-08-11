@@ -51,7 +51,7 @@ export default function PresensiPage() {
         setOfficeLocation({
           lat: data.latitude,
           lng: data.longitude,
-          radius: data.radius
+          radius: data.radius ?? 50
         });
       }
     });
