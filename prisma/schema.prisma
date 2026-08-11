@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model absensi {
+  id            Int       @default(autoincrement())
+  id_pegawai    Int
+  tanggal_absen DateTime  @db.Date
+  jam_absen     DateTime? @db.Time(0)
+  keterangan    String?   @db.VarChar(20)
+  status        Bytes?    @db.Binary(1)
+  info          String?   @db.VarChar(255)
+
+  @@id([id, id_pegawai, tanggal_absen])
+}
+
+model bagian {
+  id     Int    @id @default(autoincrement())
+  bagian String @db.VarChar(100)
+}
+
+model event {
+  id         Int       @default(autoincrement())
+  id_pegawai Int
+  tanggal    DateTime  @db.Date
+  jam        DateTime? @db.Time(0)
+  foto       String?   @db.VarChar(255)
+
+  @@id([id, id_pegawai, tanggal])
+}
+
+model jabatan {
+  id      Int     @id @default(autoincrement())
+  jabatan String? @db.VarChar(255)
+}
+
+model jadwal_satpam {
+  id         Int      @id @default(autoincrement())
+  id_pegawai Int
+  tanggal    DateTime @db.Date
+  shift      String   @db.VarChar(1)
+  pegawai    pegawai  @relation(fields: [id_pegawai], references: [id], onUpdate: Restrict, map: "jadwal_satpam_ibfk_1")
+
+  @@unique([id_pegawai, tanggal], map: "unique_jadwal")
+}
+
+model jadwal_sumber {
+  id         Int      @id @default(autoincrement())
+  id_pegawai Int
+  tanggal    DateTime @db.Date
+  shift      String   @db.VarChar(1)
+  pegawai    pegawai  @relation(fields: [id_pegawai], references: [id], onUpdate: Restrict, map: "fk_pegawai_jadwal_sumber")
+
+  @@unique([id_pegawai, tanggal], map: "unique_jadwal")
+}
+
+model jam_kerja {
+  id                Int       @id @default(autoincrement())
+  jam_masuk_senin   DateTime? @db.Time(0)
+  jam_pulang_senin  DateTime? @db.Time(0)
+  jam_masuk_selasa  DateTime? @db.Time(0)
+  jam_pulang_selasa DateTime? @db.Time(0)
+  jam_masuk_rabu    DateTime? @db.Time(0)
+  jam_pulang_rabu   DateTime? @db.Time(0)
+  jam_masuk_kamis   DateTime? @db.Time(0)
+  jam_pulang_kamis  DateTime? @db.Time(0)
+  jam_masuk_jumat   DateTime? @db.Time(0)
+  jam_pulang_jumat  DateTime? @db.Time(0)
+  jam_masuk_sabtu   DateTime? @db.Time(0)
+  jam_pulang_sabtu  DateTime? @db.Time(0)
+}
+
+model lokasi_presensi {
+  id                Int       @id @default(autoincrement())
+  nama_lokasi       String?   @db.VarChar(255)
+  alamat_lokasi     String?   @db.VarChar(255)
+  tipe_lokasi       String?   @db.VarChar(255)
+  latitude          String?   @db.VarChar(255)
+  longitude         String?   @db.VarChar(255)
+  alun_lat          String?   @db.VarChar(255)
+  alun_long         String?   @db.VarChar(255)
+  radius            Int?
+  zona_waktu        String?   @default("WIB") @db.VarChar(4)
+  jam_masuk         DateTime? @db.Time(0)
+  jam_pulang        DateTime? @db.Time(0)
+  jam_masuk_senin   DateTime? @db.Time(0)
+  jam_pulang_senin  DateTime? @db.Time(0)
+  jam_masuk_selasa  DateTime? @db.Time(0)
+  jam_pulang_selasa DateTime? @db.Time(0)
+  jam_masuk_rabu    DateTime? @db.Time(0)
+  jam_pulang_rabu   DateTime? @db.Time(0)
+  jam_masuk_kamis   DateTime? @db.Time(0)
+  jam_pulang_kamis  DateTime? @db.Time(0)
+  jam_masuk_jumat   DateTime? @db.Time(0)
+  jam_pulang_jumat  DateTime? @db.Time(0)
+  jam_masuk_sabtu   DateTime? @db.Time(0)
+  jam_pulang_sabtu  DateTime? @db.Time(0)
+  jam_masuk_minggu  DateTime? @db.Time(0)
+  jam_pulang_minggu DateTime? @db.Time(0)
+  map               String?   @db.Text
+}
+
+model pegawai {
+  id              Int             @id @default(autoincrement())
+  nik             String?         @db.VarChar(7)
+  nama            String?         @db.VarChar(50)
+  alamat          String?         @db.VarChar(255)
+  jabatan         String?         @db.VarChar(50)
+  lokasi_presensi String?         @db.VarChar(255)
+  foto            String?         @db.VarChar(255)
+  ttl             String?         @db.Text
+  lahir           DateTime?       @default(dbgenerated("('0000-00-00')")) @db.Date
+  mulai_kerja     DateTime?       @default(dbgenerated("('0000-00-00')")) @db.Date
+  agama           String?         @db.VarChar(50)
+  pendidikan      String?         @db.VarChar(50)
+  golongan        String?         @db.VarChar(50)
+  pensiun         DateTime?       @db.Date
+  gol_dar         String?         @db.VarChar(50)
+  bagian          String?         @db.VarChar(50)
+  lokasi_event    String?         @db.VarChar(100)
+  ruang           String?         @db.VarChar(2)
+  jadwal_satpam   jadwal_satpam[]
+  jadwal_sumber   jadwal_sumber[]
+  users           users[]
+}
+
+model presensi {
+  id                Int       @default(autoincrement())
+  id_pegawai        Int
+  tanggal_masuk     DateTime  @db.Date
+  jam_masuk         DateTime? @db.Time(0)
+  jam_masuk_kantor  DateTime? @db.Time(0)
+  foto_masuk        String?   @db.VarChar(255)
+  tanggal_keluar    DateTime? @db.Date
+  jam_keluar        DateTime? @db.Time(0)
+  jam_pulang_kantor DateTime? @db.Time(0)
+  foto_keluar       String?   @db.VarChar(255)
+  shift             String?   @default("") @db.VarChar(10)
+  keterangan        String?   @db.VarChar(20)
+  tanggal_absen     DateTime? @db.Date
+  jam_absen         DateTime? @db.Time(0)
+  is_lembur         Boolean   @default(false)
+
+  @@id([id, id_pegawai, tanggal_masuk])
+}
+
+model presensi_deleted {
+  id               Int       @id
+  id_pegawai       Int
+  tanggal_masuk    DateTime? @db.Date
+  jam_masuk        DateTime? @db.Time(0)
+  foto_masuk       String?   @db.VarChar(255)
+  latitude_masuk   String?   @db.VarChar(50)
+  longitude_masuk  String?   @db.VarChar(50)
+  tanggal_keluar   DateTime? @db.Date
+  jam_keluar       DateTime? @db.Time(0)
+  foto_keluar      String?   @db.VarChar(255)
+  latitude_keluar  String?   @db.VarChar(50)
+  longitude_keluar String?   @db.VarChar(50)
+  keterangan       String?   @db.VarChar(255)
+  jam_absen        DateTime? @db.Time(0)
+  shift            String?   @db.VarChar(10)
+  status_presensi  String?   @db.VarChar(50)
+  deleted_at       DateTime  @default(now()) @db.Timestamp(0)
+  deleted_by       Int?
+}
+
+model remember_me_tokens {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  token      String   @db.VarChar(255)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "remember_me_tokens_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model shift {
+  id       Int       @id @default(autoincrement())
+  masuk_a  DateTime? @db.Time(0)
+  pulang_a DateTime? @db.Time(0)
+  masuk_b  DateTime? @db.Time(0)
+  pulang_b DateTime? @db.Time(0)
+  masuk_c  DateTime? @db.Time(0)
+  pulang_c DateTime? @db.Time(0)
+  masuk_d  DateTime? @db.Time(0)
+  pulang_d DateTime? @db.Time(0)
+  masuk_e  DateTime? @db.Time(0)
+  pulang_e DateTime? @db.Time(0)
+  masuk_f  DateTime? @db.Time(0)
+  pulang_f DateTime? @db.Time(0)
+  masuk_g  DateTime? @db.Time(0)
+  pulang_g DateTime? @db.Time(0)
+  masuk_h  DateTime? @db.Time(0)
+  pulang_h DateTime? @db.Time(0)
+  masuk_i  DateTime? @db.Time(0)
+  pulang_i DateTime? @db.Time(0)
+}
+
+model users {
+  id                 Int                  @id @default(autoincrement())
+  id_pegawai         Int?
+  username           String?              @db.VarChar(50)
+  password           String?              @db.VarChar(255)
+  status             String?              @db.VarChar(50)
+  role               String?              @db.VarChar(50)
+  ruang              String?              @db.VarChar(2)
+  remember_me_tokens remember_me_tokens[]
+  pegawai            pegawai?             @relation(fields: [id_pegawai], references: [id], onDelete: Cascade, map: "FK_users_pegawai")
+
+  @@index([id_pegawai], map: "FK_users_pegawai")
+}
