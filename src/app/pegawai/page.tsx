@@ -161,10 +161,16 @@ export default function PegawaiDashboard() {
         ) : (
           <div className="grid grid-cols-1 gap-4">
             {statusHariIni.status === "Belum Presensi" && (
-              <Link href="/pegawai/presensi?type=masuk" className="bg-[#007AFF] hover:bg-[#006ee6] active:bg-[#005bb5] transition-colors rounded-[14px] p-4 flex items-center justify-center gap-2 text-white shadow-sm">
-                <Fingerprint size={22} />
-                <span className="font-semibold text-[17px]">Presensi Masuk</span>
-              </Link>
+              <div className="space-y-4">
+                <Link href="/pegawai/presensi?type=masuk" className="bg-[#007AFF] hover:bg-[#006ee6] active:bg-[#005bb5] transition-colors rounded-[14px] p-4 flex items-center justify-center gap-2 text-white shadow-sm">
+                  <Fingerprint size={22} />
+                  <span className="font-semibold text-[17px]">Presensi Masuk</span>
+                </Link>
+                <Link href="/pegawai/presensi?type=masuk_lembur" className="bg-[#FF9500] hover:bg-[#e68600] active:bg-[#cc7700] transition-colors rounded-[14px] p-4 flex items-center justify-center gap-2 text-white shadow-sm">
+                  <Clock size={22} />
+                  <span className="font-semibold text-[17px]">Mulai Lembur (Hari Libur)</span>
+                </Link>
+              </div>
             )}
 
             {statusHariIni.status === "Sedang Bekerja" && (
@@ -276,7 +282,7 @@ export default function PegawaiDashboard() {
             </div>
           </div>
 
-          {(statusHariIni?.jam_masuk_lembur || statusHariIni?.status === "Pekerjaan Selesai" || statusHariIni?.status === "Sedang Lembur" || statusHariIni?.status === "Lembur Selesai") && (
+          {statusHariIni?.status !== "Sedang Bekerja" && (
             <>
               <div className="relative flex items-center gap-4 group">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 border-white z-10 shrink-0 ${statusHariIni?.jam_masuk_lembur ? 'bg-[#FF9500]/10 text-[#FF9500]' : 'bg-gray-100 text-gray-400'}`}>
