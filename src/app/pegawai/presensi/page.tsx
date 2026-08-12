@@ -41,6 +41,28 @@ export default function PresensiPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [selectedShift, setSelectedShift] = useState<string>("");
+
+  const role = session?.user?.role || "";
+  let shiftOptions: { label: string, value: string }[] = [];
+  if (role === "sumber") {
+    shiftOptions = [{ label: "Pagi", value: "A" }, { label: "Sore", value: "B" }];
+  } else if (role === "tidar") {
+    shiftOptions = [{ label: "Pagi", value: "C" }, { label: "Sore", value: "D" }];
+  } else if (role === "satpam") {
+    shiftOptions = [{ label: "Pagi", value: "E" }, { label: "Sore", value: "F" }, { label: "Malam", value: "G" }];
+  } else if (role === "kalimas") {
+    shiftOptions = [{ label: "Masuk", value: "H" }];
+  } else if (role === "sri_ponganten") {
+    shiftOptions = [{ label: "Masuk", value: "I" }];
+  }
+
+  // Set default shift if options exist
+  useEffect(() => {
+    if (shiftOptions.length > 0 && !selectedShift) {
+      setSelectedShift(shiftOptions[0].value);
+    }
+  }, [role, selectedShift]);
 
   const [officeLocation, setOfficeLocation] = useState<{lat: number, lng: number, radius: number} | null>(null);
 
@@ -160,7 +182,8 @@ export default function PresensiPage() {
           isLembur: isLembur,
           latitude: location.lat,
           longitude: location.lng,
-          image_base64: capturedImage
+          image_base64: capturedImage,
+          shift: selectedShift || null
         })
       });
 
@@ -197,6 +220,31 @@ export default function PresensiPage() {
         {errorMsg && (
           <div className="bg-red-50 text-red-500 p-4 rounded-2xl border border-red-100 text-sm font-medium">
             {errorMsg}
+          </div>
+        )}
+
+        {/* Shift Selection Section */}
+        {isMasuk && shiftOptions.length > 0 && (
+          <div className="bg-white p-4 rounded-2xl shadow-sm space-y-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Pilih Shift Anda
+            </label>
+            <div className="relative">
+              <select
+                value={selectedShift}
+                onChange={(e) => setSelectedShift(e.target.value)}
+                className="block w-full appearance-none bg-[#F2F2F7] border-0 rounded-[14px] px-4 py-3.5 text-black font-semibold focus:ring-2 focus:ring-[#007AFF] outline-none"
+              >
+                {shiftOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    Shift {opt.label}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </div>
           </div>
         )}
 

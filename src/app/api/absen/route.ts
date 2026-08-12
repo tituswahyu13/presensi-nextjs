@@ -13,7 +13,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { type, latitude, longitude, image_base64, isLembur } = await request.json();
+    const { type, latitude, longitude, image_base64, isLembur, shift } = await request.json();
 
     if (!latitude || !longitude || !image_base64) {
       return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
@@ -96,7 +96,8 @@ export async function POST(request: Request) {
           tanggal_masuk: new Date(),
           jam_masuk: localTimeDate,
           foto_masuk: relativeFilePath,
-          is_lembur: isLembur === true
+          is_lembur: isLembur === true,
+          shift: shift || null
         }
       });
     } else if (type === 'keluar') {

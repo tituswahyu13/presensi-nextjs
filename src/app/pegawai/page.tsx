@@ -15,9 +15,9 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), { ssr: f
 export default function PegawaiDashboard() {
   const [time, setTime] = useState<Date | null>(null);
   const [locationName, setLocationName] = useState<string>("Sedang mencari lokasi Anda...");
-  const [locationCoords, setLocationCoords] = useState<{lat: number, lng: number} | null>(null);
-  const [officeLocation, setOfficeLocation] = useState<{lat: number, lng: number, radius: number} | null>(null);
-  const [statusHariIni, setStatusHariIni] = useState<{status: string, jam_masuk: string | null, jam_keluar: string | null, jam_masuk_lembur: string | null, jam_keluar_lembur: string | null} | null>(null);
+  const [locationCoords, setLocationCoords] = useState<{ lat: number, lng: number } | null>(null);
+  const [officeLocation, setOfficeLocation] = useState<{ lat: number, lng: number, radius: number } | null>(null);
+  const [statusHariIni, setStatusHariIni] = useState<{ status: string, jam_masuk: string | null, jam_keluar: string | null, jam_masuk_lembur: string | null, jam_keluar_lembur: string | null } | null>(null);
 
   useEffect(() => {
     // Fetch Status Presensi
@@ -46,12 +46,12 @@ export default function PegawaiDashboard() {
 
     // Set initial time
     setTime(new Date());
-    
+
     // Update time every second
     const interval = setInterval(() => {
       setTime(new Date());
     }, 1000);
-    
+
     // Get Location
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -105,7 +105,7 @@ export default function PegawaiDashboard() {
 
   return (
     <div className="space-y-6">
-      
+
       {/* Clock Card (HIG Style) */}
       <div className="bg-white rounded-2xl p-6 text-center shadow-sm">
         <p className="text-gray-500 text-[13px] font-medium mb-1 uppercase tracking-wider">
@@ -168,7 +168,7 @@ export default function PegawaiDashboard() {
                 </Link>
                 <Link href="/pegawai/presensi?type=masuk_lembur" className="bg-[#FF9500] hover:bg-[#e68600] active:bg-[#cc7700] transition-colors rounded-[14px] p-4 flex items-center justify-center gap-2 text-white shadow-sm">
                   <Clock size={22} />
-                  <span className="font-semibold text-[17px]">Mulai Lembur (Hari Libur)</span>
+                  <span className="font-semibold text-[17px]">Mulai Lembur</span>
                 </Link>
               </div>
             )}
@@ -216,9 +216,8 @@ export default function PegawaiDashboard() {
             const distance = Math.round(calculateDistance(locationCoords.lat, locationCoords.lng, officeLocation.lat, officeLocation.lng));
             const isInside = distance <= officeLocation.radius;
             return (
-              <span className={`text-[11px] font-semibold px-2 py-1 rounded-md flex items-center gap-1 ${
-                isInside ? 'bg-[#34C759]/10 text-[#34C759]' : 'bg-[#FF3B30]/10 text-[#FF3B30]'
-              }`}>
+              <span className={`text-[11px] font-semibold px-2 py-1 rounded-md flex items-center gap-1 ${isInside ? 'bg-[#34C759]/10 text-[#34C759]' : 'bg-[#FF3B30]/10 text-[#FF3B30]'
+                }`}>
                 {isInside ? (
                   <>Area Valid ({distance}m)</>
                 ) : (
@@ -230,8 +229,8 @@ export default function PegawaiDashboard() {
         </div>
         <div className="h-40 bg-gray-100 rounded-xl overflow-hidden relative z-0">
           {locationCoords && typeof window !== 'undefined' ? (
-            <MapComponent 
-              locationCoords={locationCoords} 
+            <MapComponent
+              locationCoords={locationCoords}
               officeLocation={officeLocation}
               radiusColor={officeLocation && calculateDistance(locationCoords.lat, locationCoords.lng, officeLocation.lat, officeLocation.lng) <= officeLocation.radius ? '#34C759' : '#FF3B30'}
             />
@@ -248,15 +247,14 @@ export default function PegawaiDashboard() {
       <div className="bg-white rounded-2xl p-5 shadow-sm">
         <div className="flex justify-between items-center mb-5">
           <h3 className="font-semibold text-black text-[15px]">Aktivitas Hari Ini</h3>
-          <span className={`px-2 py-1 rounded-md text-[11px] font-semibold ${
-            statusHariIni?.status === "Belum Presensi" ? "bg-gray-100 text-gray-600" :
-            statusHariIni?.status === "Sedang Bekerja" ? "bg-[#007AFF]/10 text-[#007AFF]" :
-            "bg-[#34C759]/10 text-[#34C759]"
-          }`}>
+          <span className={`px-2 py-1 rounded-md text-[11px] font-semibold ${statusHariIni?.status === "Belum Presensi" ? "bg-gray-100 text-gray-600" :
+              statusHariIni?.status === "Sedang Bekerja" ? "bg-[#007AFF]/10 text-[#007AFF]" :
+                "bg-[#34C759]/10 text-[#34C759]"
+            }`}>
             {statusHariIni?.status || "Memuat..."}
           </span>
         </div>
-        
+
         <div className="space-y-4 relative before:absolute before:inset-0 before:ml-[19px] before:-translate-x-px before:h-full before:w-0.5 before:bg-gray-200">
           <div className="relative flex items-center gap-4 group">
             <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 border-white z-10 shrink-0 ${statusHariIni?.jam_masuk ? 'bg-[#007AFF]/10 text-[#007AFF]' : 'bg-gray-100 text-gray-400'}`}>
