@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Lock, User } from "lucide-react";
 
@@ -27,8 +27,12 @@ export default function LoginPage() {
       setError(res.error);
       setLoading(false);
     } else {
-      // TODO: Redirect based on role, for now just go to /pegawai
-      router.push("/pegawai");
+      const session = await getSession();
+      if (session?.user?.role === "admin") {
+        router.push("/admin/presensi");
+      } else {
+        router.push("/pegawai");
+      }
     }
   };
 

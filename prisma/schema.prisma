@@ -127,11 +127,13 @@ model pegawai {
   jadwal_satpam   jadwal_satpam[]
   jadwal_sumber   jadwal_sumber[]
   users           users[]
+  presensi        presensi[]
 }
 
 model presensi {
   id                Int       @default(autoincrement())
   id_pegawai        Int
+  pegawai           pegawai   @relation(fields: [id_pegawai], references: [id], onDelete: Cascade, onUpdate: Restrict)
   tanggal_masuk     DateTime  @db.Date
   jam_masuk         DateTime? @db.Time(0)
   jam_masuk_kantor  DateTime? @db.Time(0)

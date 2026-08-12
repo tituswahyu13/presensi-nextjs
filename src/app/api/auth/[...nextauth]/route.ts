@@ -19,7 +19,15 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.users.findFirst({
           where: { username: credentials.username },
           include: {
-            pegawai: true
+            pegawai: {
+              select: {
+                nama: true,
+                nik: true,
+                jabatan: true,
+                lokasi_presensi: true,
+                foto: true
+              }
+            }
           }
         });
 
