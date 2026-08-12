@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { MapPin, Camera, X, Check, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import dynamic from 'next/dynamic';
+import * as faceapi from '@vladmandic/face-api';
 
 import { getLokasiPresensi } from "@/app/actions/lokasi";
 import { calculateDistance } from "@/lib/haversine";
@@ -43,6 +44,10 @@ export default function PresensiPage() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [selectedShift, setSelectedShift] = useState<string>("");
 
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
+  const [isFaceAligned, setIsFaceAligned] = useState(false);
+  const [faceWarningMsg, setFaceWarningMsg] = useState("Memuat model AI...");
+
   const role = session?.user?.role || "";
   let shiftOptions: { label: string, value: string }[] = [];
   if (role === "sumber") {
@@ -67,6 +72,19 @@ export default function PresensiPage() {
   const [officeLocation, setOfficeLocation] = useState<{lat: number, lng: number, radius: number} | null>(null);
 
   useEffect(() => {
+    // Load face-api models
+    const loadModels = async () => {
+      try {
+        await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+        setIsModelLoaded(true);
+        setFaceWarningMsg("Mendeteksi wajah...");
+      } catch (e) {
+        console.error("Gagal memuat model face-api", e);
+        setFaceWarningMsg("Gagal memuat model AI");
+      }
+    };
+    loadModels();
+
     // Fetch Office Location
     getLokasiPresensi().then((data) => {
       if (data) {
@@ -137,6 +155,58 @@ export default function PresensiPage() {
       setErrorMsg("Gagal mengakses kamera. Pastikan izin kamera diberikan.");
     }
   }, []);
+
+  const handleVideoPlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const runDetection = async () => {
+      if (video.paused || video.ended || capturedImage) return;
+
+      if (isModelLoaded) {
+        const detection = await faceapi.detectSingleFace(
+          video,
+          new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 })
+        );
+
+        if (detection) {
+          const { width, height, x, y } = detection.box;
+          const { videoWidth, videoHeight } = video;
+          
+          const faceCenterX = x + width / 2;
+          const faceCenterY = y + height / 2;
+          
+          const vidCenterX = videoWidth / 2;
+          const vidCenterY = videoHeight / 2;
+          
+          const isCenteredX = Math.abs(faceCenterX - vidCenterX) < (videoWidth * 0.10);
+          const isCenteredY = Math.abs(faceCenterY - vidCenterY) < (videoHeight * 0.10);
+          
+          const minDim = Math.min(videoWidth, videoHeight);
+          const faceSizeRatio = Math.max(width, height) / minDim;
+          const isTooFar = faceSizeRatio < 0.35;
+          const isTooClose = faceSizeRatio > 0.55;
+          const isGoodSize = !isTooFar && !isTooClose;
+
+          if (isCenteredX && isCenteredY && isGoodSize) {
+            setIsFaceAligned(true);
+            setFaceWarningMsg("");
+          } else {
+            setIsFaceAligned(false);
+            if (isTooFar) setFaceWarningMsg("Mendekat ke layar");
+            else if (isTooClose) setFaceWarningMsg("Mundur sedikit, terlalu dekat");
+            else setFaceWarningMsg("Posisikan wajah tepat di tengah oval");
+          }
+        } else {
+          setIsFaceAligned(false);
+          setFaceWarningMsg("Wajah tidak terdeteksi");
+        }
+      }
+      setTimeout(() => requestAnimationFrame(runDetection), 150);
+    };
+
+    runDetection();
+  };
 
   useEffect(() => {
     startCamera();
@@ -256,6 +326,7 @@ export default function PresensiPage() {
               autoPlay
               playsInline
               muted
+              onPlay={handleVideoPlay}
               className={`w-full h-full object-cover transform -scale-x-100 ${capturedImage ? 'hidden' : 'block'}`}
             />
             
@@ -266,7 +337,14 @@ export default function PresensiPage() {
             {/* Camera Overlay */}
             {!capturedImage && (
               <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[50%] border border-white/40 rounded-[100px] shadow-[0_0_0_9999px_rgba(0,0,0,0.3)]"></div>
+                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[50%] border-4 rounded-[100px] shadow-[0_0_0_9999px_rgba(0,0,0,0.3)] transition-colors duration-300 ${isFaceAligned ? 'border-green-500' : 'border-red-500/70'}`}></div>
+                {!isFaceAligned && (
+                  <div className="absolute bottom-6 left-0 right-0 text-center">
+                    <span className="bg-black/60 text-white text-xs font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                      {faceWarningMsg}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -275,7 +353,8 @@ export default function PresensiPage() {
             {!capturedImage ? (
               <button
                 onClick={capturePhoto}
-                className="w-16 h-16 rounded-full bg-white border-[4px] border-gray-300 ring-4 ring-offset-2 ring-gray-100 flex items-center justify-center active:scale-95 transition-transform"
+                disabled={!isFaceAligned || !isModelLoaded}
+                className={`w-16 h-16 rounded-full border-[4px] ring-4 ring-offset-2 flex items-center justify-center transition-all duration-300 ${isFaceAligned ? 'bg-white border-green-500 ring-green-100 active:scale-95' : 'bg-gray-100 border-gray-300 ring-gray-50 opacity-60 cursor-not-allowed'}`}
               ></button>
             ) : (
               <div className="flex gap-3 w-full">
