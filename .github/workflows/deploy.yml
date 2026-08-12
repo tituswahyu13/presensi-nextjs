@@ -11,10 +11,12 @@ jobs:
     steps:
       - name: Deploy Application
         run: |
+          export PATH=$PATH:/usr/bin:/usr/local/bin:$HOME/.nvm/versions/node/$(node -v 2>/dev/null)/bin
           cd /var/www/presensi-nextjs
-          git pull origin main
+          git fetch origin main
+          git reset --hard origin/main
           npm install
           npx prisma generate
           npx prisma db push
           npm run build
-          PORT=3002 pm2 restart prespam
+          PORT=3002 pm2 restart prespam || PORT=3002 pm2 start npm --name "prespam" -- start
