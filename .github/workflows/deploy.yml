@@ -1,0 +1,20 @@
+name: Auto Deploy PresPAM
+
+on:
+  push:
+    branches: [ main ] # Sesuaikan jika nama branch utama Anda 'master'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy Application
+        run: |
+          cd /var/www/presensi-nextjs
+          git pull origin main
+          npm install
+          npx prisma generate
+          npx prisma db push
+          npm run build
+          PORT=3002 pm2 restart prespam
