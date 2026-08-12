@@ -228,10 +228,10 @@ export default function PresensiPage() {
                 if (minEAR <= 0.26 && lastEAR >= 0.28 && earHistory.current.length > 3) {
                   setHasBlinked(true);
                   hasBlinkedRef.current = true;
-                  setFaceWarningMsg("Liveness OK! Silakan ambil foto.");
+                  setFaceWarningMsg("Liveness OK! Memotret otomatis dalam 1 detik...");
                 }
               } else {
-                setFaceWarningMsg("Liveness OK! Silakan ambil foto.");
+                setFaceWarningMsg("Liveness OK! Memotret otomatis dalam 1 detik...");
               }
             } else {
               setIsFaceAligned(false);
@@ -303,6 +303,16 @@ export default function PresensiPage() {
       }
     }
   };
+
+  useEffect(() => {
+    if (hasBlinked && !capturedImage) {
+      const timer = setTimeout(() => {
+        capturePhoto();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasBlinked, capturedImage]);
 
   const retakePhoto = () => {
     setCapturedImage(null);
