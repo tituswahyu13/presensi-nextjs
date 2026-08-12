@@ -3,10 +3,18 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { MapPin, Camera, X, Check, Loader2, ArrowLeft } from "lucide-react";
+import { ArrowLeft, MapPin, Loader2, Check, RefreshCcw, X } from "lucide-react";
 import Link from "next/link";
 import dynamic from 'next/dynamic';
 import * as faceapi from '@vladmandic/face-api';
+
+function getEAR(eye: {x: number, y: number}[]) {
+  const v1 = Math.hypot(eye[1].x - eye[5].x, eye[1].y - eye[5].y);
+  const v2 = Math.hypot(eye[2].x - eye[4].x, eye[2].y - eye[4].y);
+  const h = Math.hypot(eye[0].x - eye[3].x, eye[0].y - eye[3].y);
+  if (h === 0) return 0;
+  return (v1 + v2) / (2.0 * h);
+}
 
 import { getLokasiPresensi } from "@/app/actions/lokasi";
 import { calculateDistance } from "@/lib/haversine";
@@ -44,8 +52,14 @@ export default function PresensiPage() {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [selectedShift, setSelectedShift] = useState<string>("");
 
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [isFaceAligned, setIsFaceAligned] = useState(false);
+  const [hasBlinked, setHasBlinked] = useState(false);
+  const hasBlinkedRef = useRef(false);
+  const earHistory = useRef<number[]>([]);
   const [faceWarningMsg, setFaceWarningMsg] = useState("Memuat model AI...");
 
   const role = session?.user?.role || "";
@@ -76,6 +90,7 @@ export default function PresensiPage() {
     const loadModels = async () => {
       try {
         await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+        await faceapi.nets.faceLandmark68TinyNet.loadFromUri('/models');
         setIsModelLoaded(true);
         setFaceWarningMsg("Mendeteksi wajah...");
       } catch (e) {
@@ -163,46 +178,85 @@ export default function PresensiPage() {
     const runDetection = async () => {
       if (video.paused || video.ended || capturedImage) return;
 
-      if (isModelLoaded) {
-        const detection = await faceapi.detectSingleFace(
-          video,
-          new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 })
-        );
+      if (isModelLoaded && video.videoWidth > 0) {
+        try {
+          const detection = await faceapi.detectSingleFace(
+            video,
+            new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.5 })
+          ).withFaceLandmarks(true);
 
-        if (detection) {
-          const { width, height, x, y } = detection.box;
-          const { videoWidth, videoHeight } = video;
-          
-          const faceCenterX = x + width / 2;
-          const faceCenterY = y + height / 2;
-          
-          const vidCenterX = videoWidth / 2;
-          const vidCenterY = videoHeight / 2;
-          
-          const isCenteredX = Math.abs(faceCenterX - vidCenterX) < (videoWidth * 0.10);
-          const isCenteredY = Math.abs(faceCenterY - vidCenterY) < (videoHeight * 0.10);
-          
-          const minDim = Math.min(videoWidth, videoHeight);
-          const faceSizeRatio = Math.max(width, height) / minDim;
-          const isTooFar = faceSizeRatio < 0.35;
-          const isTooClose = faceSizeRatio > 0.55;
-          const isGoodSize = !isTooFar && !isTooClose;
+          if (detection) {
+            const { width, height, x, y } = detection.detection.box;
+            const { videoWidth, videoHeight } = video;
+            
+            const faceCenterX = x + width / 2;
+            const faceCenterY = y + height / 2;
+            
+            const vidCenterX = videoWidth / 2;
+            const vidCenterY = videoHeight / 2;
+            
+            const isCenteredX = Math.abs(faceCenterX - vidCenterX) < (videoWidth * 0.10);
+            const isCenteredY = Math.abs(faceCenterY - vidCenterY) < (videoHeight * 0.10);
+            
+            const minDim = Math.min(videoWidth, videoHeight);
+            const faceSizeRatio = Math.max(width, height) / minDim;
+            const isTooFar = faceSizeRatio < 0.25;
+            const isTooClose = faceSizeRatio > 0.55;
+            const isGoodSize = !isTooFar && !isTooClose;
 
-          if (isCenteredX && isCenteredY && isGoodSize) {
-            setIsFaceAligned(true);
-            setFaceWarningMsg("");
+            if (isCenteredX && isCenteredY && isGoodSize) {
+              setIsFaceAligned(true);
+              
+              if (!hasBlinkedRef.current) {
+                setFaceWarningMsg("Wajah pas! Mohon kedipkan mata untuk verifikasi.");
+                
+                const landmarks = detection.landmarks;
+                const leftEye = landmarks.getLeftEye();
+                const rightEye = landmarks.getRightEye();
+                
+                const leftEAR = getEAR(leftEye);
+                const rightEAR = getEAR(rightEye);
+                const avgEAR = (leftEAR + rightEAR) / 2.0;
+                
+                earHistory.current.push(avgEAR);
+                if (earHistory.current.length > 20) earHistory.current.shift();
+                
+                const minEAR = Math.min(...earHistory.current);
+                const lastEAR = earHistory.current[earHistory.current.length - 1];
+                
+                // Blink logic: drop below 0.26 and rise back above 0.28
+                if (minEAR <= 0.26 && lastEAR >= 0.28 && earHistory.current.length > 3) {
+                  setHasBlinked(true);
+                  hasBlinkedRef.current = true;
+                  setFaceWarningMsg("Liveness OK! Silakan ambil foto.");
+                }
+              } else {
+                setFaceWarningMsg("Liveness OK! Silakan ambil foto.");
+              }
+            } else {
+              setIsFaceAligned(false);
+              setHasBlinked(false);
+              hasBlinkedRef.current = false;
+              earHistory.current = [];
+              
+              if (isTooFar) setFaceWarningMsg("Mendekat ke layar");
+              else if (isTooClose) setFaceWarningMsg("Mundur sedikit, terlalu dekat");
+              else setFaceWarningMsg("Posisikan wajah tepat di tengah oval");
+            }
           } else {
             setIsFaceAligned(false);
-            if (isTooFar) setFaceWarningMsg("Mendekat ke layar");
-            else if (isTooClose) setFaceWarningMsg("Mundur sedikit, terlalu dekat");
-            else setFaceWarningMsg("Posisikan wajah tepat di tengah oval");
+            setHasBlinked(false);
+            hasBlinkedRef.current = false;
+            earHistory.current = [];
+            setFaceWarningMsg("Wajah tidak terdeteksi");
           }
-        } else {
-          setIsFaceAligned(false);
-          setFaceWarningMsg("Wajah tidak terdeteksi");
+        } catch (error) {
+          console.error("Face detection error:", error);
         }
       }
-      setTimeout(() => requestAnimationFrame(runDetection), 150);
+      
+      // Call requestAnimationFrame directly to maximize FPS for blink detection
+      requestAnimationFrame(runDetection);
     };
 
     runDetection();
@@ -219,15 +273,32 @@ export default function PresensiPage() {
 
   const capturePhoto = () => {
     if (videoRef.current) {
+      const video = videoRef.current;
+      const vWidth = video.videoWidth;
+      const vHeight = video.videoHeight;
+      const vAspect = vWidth / vHeight;
+      const containerAspect = 3 / 4;
+      
+      let sx = 0, sy = 0, sWidth = vWidth, sHeight = vHeight;
+      
+      if (vAspect > containerAspect) {
+        // Video is wider, potong kiri & kanan
+        sWidth = vHeight * containerAspect;
+        sx = (vWidth - sWidth) / 2;
+      } else {
+        // Video is taller, potong atas & bawah
+        sHeight = vWidth / containerAspect;
+        sy = (vHeight - sHeight) / 2;
+      }
+      
       const canvas = document.createElement("canvas");
-      canvas.width = videoRef.current.videoWidth;
-      canvas.height = videoRef.current.videoHeight;
+      canvas.width = sWidth;
+      canvas.height = sHeight;
       const ctx = canvas.getContext("2d");
       if (ctx) {
-        // Mirror the image
         ctx.translate(canvas.width, 0);
         ctx.scale(-1, 1);
-        ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
         setCapturedImage(canvas.toDataURL("image/jpeg", 0.8));
       }
     }
@@ -263,8 +334,13 @@ export default function PresensiPage() {
         throw new Error(data.error || "Gagal melakukan presensi");
       }
 
-      alert(data.message);
-      router.push("/pegawai");
+      setSuccessMsg(data.message);
+      setShowSuccessPopup(true);
+      
+      setTimeout(() => {
+        router.push("/pegawai");
+      }, 2000);
+      
     } catch (err: any) {
       setErrorMsg(err.message);
       setSubmitting(false);
@@ -337,8 +413,8 @@ export default function PresensiPage() {
             {/* Camera Overlay */}
             {!capturedImage && (
               <div className="absolute inset-0 pointer-events-none">
-                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[50%] border-4 rounded-[100px] shadow-[0_0_0_9999px_rgba(0,0,0,0.3)] transition-colors duration-300 ${isFaceAligned ? 'border-green-500' : 'border-red-500/70'}`}></div>
-                {!isFaceAligned && (
+                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[50%] border-4 rounded-[100px] shadow-[0_0_0_9999px_rgba(0,0,0,0.3)] transition-colors duration-300 ${isFaceAligned && hasBlinked ? 'border-green-500' : isFaceAligned ? 'border-yellow-400' : 'border-red-500/70'}`}></div>
+                {faceWarningMsg && (
                   <div className="absolute bottom-6 left-0 right-0 text-center">
                     <span className="bg-black/60 text-white text-xs font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm">
                       {faceWarningMsg}
@@ -352,10 +428,15 @@ export default function PresensiPage() {
           <div className="mt-5 flex justify-center">
             {!capturedImage ? (
               <button
-                onClick={capturePhoto}
-                disabled={!isFaceAligned || !isModelLoaded}
-                className={`w-16 h-16 rounded-full border-[4px] ring-4 ring-offset-2 flex items-center justify-center transition-all duration-300 ${isFaceAligned ? 'bg-white border-green-500 ring-green-100 active:scale-95' : 'bg-gray-100 border-gray-300 ring-gray-50 opacity-60 cursor-not-allowed'}`}
-              ></button>
+                  onClick={capturePhoto}
+                  disabled={!isFaceAligned || !hasBlinked}
+                  className={`relative w-20 h-20 rounded-full flex items-center justify-center transition-all ${
+                    isFaceAligned && hasBlinked 
+                      ? "bg-white scale-100 hover:scale-105 shadow-[0_0_15px_rgba(255,255,255,0.4)]" 
+                      : "bg-gray-400 scale-90 cursor-not-allowed opacity-50"}`}
+              >
+                  <div className={`w-16 h-16 rounded-full border-[3px] ${isFaceAligned && hasBlinked ? 'border-[#007AFF]' : 'border-gray-500'}`}></div>
+              </button>
             ) : (
               <div className="flex gap-3 w-full">
                 <button
@@ -429,6 +510,21 @@ export default function PresensiPage() {
         </div>
         
       </main>
+
+      {/* Success Popup Overlay */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-300">
+          <div className="bg-white rounded-3xl p-8 flex flex-col items-center justify-center max-w-[80%] shadow-2xl animate-in zoom-in duration-300">
+            <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-5">
+              <Check size={40} strokeWidth={3} />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Berhasil!</h2>
+            <p className="text-gray-500 text-center text-sm font-medium leading-relaxed">
+              {successMsg}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

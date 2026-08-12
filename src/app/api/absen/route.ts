@@ -89,15 +89,46 @@ export async function POST(request: Request) {
       // Create a Date object offset by local timezone to trick Prisma into saving the local time in the TIME column
       const localTimeDate = new Date();
       localTimeDate.setMinutes(localTimeDate.getMinutes() - localTimeDate.getTimezoneOffset());
+      
+      const todayMidnight = new Date();
+      todayMidnight.setUTCHours(0, 0, 0, 0);
+
+      // Ambil jam masuk kantor & jam pulang kantor
+      let jamMasukKantor = null;
+      let jamPulangKantor = null;
+
+      if (shift) {
+        const shiftData = await prisma.shift.findFirst({ where: { id: 1 } });
+        if (shiftData) {
+          const shiftKey = shift.toLowerCase();
+          jamMasukKantor = (shiftData as any)[`masuk_${shiftKey}`] || null;
+          jamPulangKantor = (shiftData as any)[`pulang_${shiftKey}`] || null;
+        }
+      } else {
+        const day = dateObj.getDay();
+        switch (day) {
+          case 1: jamMasukKantor = lokasi.jam_masuk_senin; jamPulangKantor = lokasi.jam_pulang_senin; break;
+          case 2: jamMasukKantor = lokasi.jam_masuk_selasa; jamPulangKantor = lokasi.jam_pulang_selasa; break;
+          case 3: jamMasukKantor = lokasi.jam_masuk_rabu; jamPulangKantor = lokasi.jam_pulang_rabu; break;
+          case 4: jamMasukKantor = lokasi.jam_masuk_kamis; jamPulangKantor = lokasi.jam_pulang_kamis; break;
+          case 5: jamMasukKantor = lokasi.jam_masuk_jumat; jamPulangKantor = lokasi.jam_pulang_jumat; break;
+          case 6: jamMasukKantor = lokasi.jam_masuk_sabtu; jamPulangKantor = lokasi.jam_pulang_sabtu; break;
+          case 0: jamMasukKantor = lokasi.jam_masuk_minggu; jamPulangKantor = lokasi.jam_pulang_minggu; break;
+        }
+        if (!jamMasukKantor) jamMasukKantor = lokasi.jam_masuk;
+        if (!jamPulangKantor) jamPulangKantor = lokasi.jam_pulang;
+      }
 
       await prisma.presensi.create({
         data: {
           id_pegawai: id_pegawai,
-          tanggal_masuk: new Date(),
+          tanggal_masuk: todayMidnight,
           jam_masuk: localTimeDate,
           foto_masuk: relativeFilePath,
           is_lembur: isLembur === true,
-          shift: shift || null
+          shift: shift || null,
+          jam_masuk_kantor: jamMasukKantor,
+          jam_pulang_kantor: jamPulangKantor
         }
       });
     } else if (type === 'keluar') {
