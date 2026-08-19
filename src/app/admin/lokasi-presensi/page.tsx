@@ -48,7 +48,7 @@ export default async function AdminLokasiPage({
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-800">Daftar Lokasi Presensi</h2>
-          <SearchBar placeholder="Cari lokasi presensi..." defaultValue={q} />
+          <SearchBar placeholder="Cari lokasi presensi..." />
         </div>
 
         <div className="overflow-x-auto">

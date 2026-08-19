@@ -58,7 +58,7 @@ export default async function AdminJabatanPage({
       if (a.is_kepala && !b.is_kepala) return -1;
       if (!a.is_kepala && b.is_kepala) return 1;
 
-      return a.jabatan.localeCompare(b.jabatan);
+      return (a.jabatan || "").localeCompare(b.jabatan || "");
     });
   }
 

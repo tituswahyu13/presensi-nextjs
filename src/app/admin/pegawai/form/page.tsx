@@ -56,7 +56,7 @@ export default async function AdminPegawaiFormPage({
         isEdit={isEdit} 
         bagians={bagians} 
         jabatans={jabatans} 
-        lokasis={lokasis} 
+        lokasis={lokasis.map(l => ({...l, nama_lokasi: l.nama_lokasi || ""}))} 
         tipeJadwals={tipeJadwals}
       />
     </div>

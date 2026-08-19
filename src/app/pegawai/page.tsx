@@ -29,8 +29,8 @@ export default function PegawaiDashboard() {
     getLokasiPresensi().then((data) => {
       if (data) {
         setOfficeLocation({
-          lat: data.latitude,
-          lng: data.longitude,
+          lat: parseFloat(data.latitude || "0"),
+          lng: parseFloat(data.longitude || "0"),
           radius: data.radius ?? 50
         });
       }

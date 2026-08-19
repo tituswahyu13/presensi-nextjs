@@ -8,14 +8,14 @@ export async function createBagian(data: any) {
     const parent_id = data.parent_id ? parseInt(data.parent_id) : null;
     
     const jabatanCreateData = Array.isArray(data.jabatanList) 
-      ? data.jabatanList.filter(j => !j.id).map((j: any) => ({
+      ? data.jabatanList.filter((j: any) => !j.id).map((j: any) => ({
           jabatan: j.jabatan,
           is_kepala: j.is_kepala
         }))
       : [];
 
     const jabatanConnectData = Array.isArray(data.jabatanList)
-      ? data.jabatanList.filter(j => j.id).map(j => ({ id: parseInt(j.id) }))
+      ? data.jabatanList.filter((j: any) => j.id).map((j: any) => ({ id: parseInt(j.id) }))
       : [];
 
     const newBagian = await prisma.bagian.create({
