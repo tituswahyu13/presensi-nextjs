@@ -1,27 +1,63 @@
 "use server";
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
-export async function getLokasiPresensi() {
-  const session = await getServerSession(authOptions);
-  
-  if (!session?.user?.lokasi_presensi) {
-    return null;
+type LokasiInput = {
+  nama_lokasi: string;
+  alamat_lokasi: string;
+  latitude: string;
+  longitude: string;
+  radius: number;
+};
+
+export async function createLokasi(data: LokasiInput) {
+  try {
+    await prisma.lokasi_presensi.create({
+      data: {
+        nama_lokasi: data.nama_lokasi,
+        alamat_lokasi: data.alamat_lokasi,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        radius: data.radius,
+      }
+    });
+
+    revalidatePath("/admin/lokasi-presensi");
+    return { success: true, message: "Lokasi berhasil ditambahkan" };
+  } catch (error: any) {
+    return { success: false, message: error?.message || "Terjadi kesalahan" };
   }
+}
 
-  const lokasi = await prisma.lokasi_presensi.findFirst({
-    where: {
-      nama_lokasi: session.user.lokasi_presensi
-    }
-  });
+export async function updateLokasi(id: number, data: LokasiInput) {
+  try {
+    await prisma.lokasi_presensi.update({ 
+      where: { id }, 
+      data: {
+        nama_lokasi: data.nama_lokasi,
+        alamat_lokasi: data.alamat_lokasi,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        radius: data.radius,
+      } 
+    });
+    revalidatePath("/admin/lokasi-presensi");
+    return { success: true, message: "Berhasil diperbarui" };
+  } catch (error) {
+    return { success: false, message: "Terjadi kesalahan" };
+  }
+}
 
-  if (!lokasi) return null;
-
-  return {
-    latitude: parseFloat(lokasi.latitude ?? "0"),
-    longitude: parseFloat(lokasi.longitude ?? "0"),
-    radius: lokasi.radius
-  };
+export async function deleteLokasi(id: number) {
+  try {
+    await prisma.lokasi_presensi.update({ 
+      where: { id }, 
+      data: { is_deleted: true } 
+    });
+    revalidatePath("/admin/lokasi-presensi");
+    return { success: true, message: "Lokasi dihapus" };
+  } catch (error) {
+    return { success: false, message: "Gagal menghapus" };
+  }
 }

@@ -6,11 +6,12 @@ export const dynamic = 'force-dynamic';
 export default async function AdminPresensiPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const resolvedParams = await searchParams;
   // Get filter values from URL params
-  const dateStr = typeof searchParams.date === 'string' ? searchParams.date : new Date().toISOString().split('T')[0];
-  const filterBagian = typeof searchParams.bagian === 'string' ? searchParams.bagian : '';
+  const dateStr = typeof resolvedParams.date === 'string' ? resolvedParams.date : new Date().toISOString().split('T')[0];
+  const filterBagian = typeof resolvedParams.bagian === 'string' ? resolvedParams.bagian : '';
 
   // Get list of 'Bagian' for the dropdown
   const bagianList = await prisma.bagian.findMany({

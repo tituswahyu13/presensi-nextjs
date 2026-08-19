@@ -1,9 +1,8 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { Users, FileText } from "lucide-react";
 import LogoutButton from "./LogoutButton";
+import AdminSidebarNav from "./AdminSidebarNav";
 
 export default async function AdminLayout({
   children,
@@ -24,17 +23,7 @@ export default async function AdminLayout({
           <h1 className="text-xl font-bold text-cyan-600">Admin PresPAM</h1>
         </div>
         
-        <nav className="flex-1 p-4 space-y-2">
-          <Link href="/admin/presensi" className="flex items-center gap-3 px-4 py-3 bg-cyan-50 text-cyan-700 rounded-xl font-medium transition-colors">
-            <FileText className="w-5 h-5" />
-            Rekap Presensi
-          </Link>
-          
-          <Link href="/admin/pegawai" className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors">
-            <Users className="w-5 h-5" />
-            Data Pegawai
-          </Link>
-        </nav>
+        <AdminSidebarNav />
         
         <div className="p-4 border-t border-gray-200">
           <LogoutButton />
