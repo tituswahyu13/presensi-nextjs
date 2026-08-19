@@ -11,6 +11,17 @@ type LokasiInput = {
   radius: number;
 };
 
+export async function getLokasiPresensi() {
+  try {
+    const lokasi = await prisma.lokasi_presensi.findFirst({
+      where: { is_deleted: false },
+    });
+    return lokasi;
+  } catch (error) {
+    return null;
+  }
+}
+
 export async function createLokasi(data: LokasiInput) {
   try {
     await prisma.lokasi_presensi.create({
