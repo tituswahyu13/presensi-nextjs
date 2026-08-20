@@ -41,7 +41,7 @@ export default function PegawaiLayout({ children }: { children: React.ReactNode 
             )}
           </div>
           <div>
-            <p className="text-xs text-gray-500 font-medium">Selamat datang,</p>
+            <p className="text-xs text-[var(--text-muted)] font-medium">Selamat datang,</p>
             <h2 className="text-[17px] font-semibold text-black leading-tight tracking-tight">
               {session.user.name}
             </h2>
@@ -50,7 +50,7 @@ export default function PegawaiLayout({ children }: { children: React.ReactNode 
         <div className="flex items-center gap-2">
           <Link 
             href="http://localhost:3001"
-            className="h-8 w-8 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+            className="h-8 w-8 rounded-full flex items-center justify-center text-[var(--text-muted)] hover:bg-gray-100 transition-colors"
             title="Kembali ke Portal"
           >
             <LayoutGrid size={20} />

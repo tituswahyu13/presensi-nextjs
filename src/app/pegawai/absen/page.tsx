@@ -204,7 +204,7 @@ export default function AbsenPage() {
                 <button
                   onClick={retakePhoto}
                   disabled={submitting}
-                  className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 font-bold rounded-xl flex items-center justify-center gap-2"
+                  className="flex-1 py-3 px-4 bg-gray-100 text-[var(--text-primary)] font-bold rounded-xl flex items-center justify-center gap-2"
                 >
                   <X size={18} /> Ulangi
                 </button>
@@ -227,8 +227,8 @@ export default function AbsenPage() {
               <MapPin size={16} />
             </div>
             <div>
-              <h3 className="font-bold text-gray-800 text-sm">Lokasi Anda</h3>
-              <p className="text-[10px] text-gray-500">Pastikan berada dalam zona hijau</p>
+              <h3 className="font-bold text-[var(--text-primary)] text-sm">Lokasi Anda</h3>
+              <p className="text-[10px] text-[var(--text-muted)]">Pastikan berada dalam zona hijau</p>
             </div>
           </div>
           

@@ -26,16 +26,16 @@ export default async function AturanTipeJadwalPage({
       <div className="flex items-center gap-4 mb-8">
         <Link 
           href="/admin/tipe-jadwal"
-          className="p-2 text-gray-500 hover:text-cyan-500 hover:bg-cyan-50 rounded-lg transition-colors"
+          className="p-2 text-[var(--text-muted)] hover:text-cyan-500 hover:bg-cyan-50 rounded-lg transition-colors"
         >
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <Clock className="w-6 h-6 text-cyan-500" />
             Pengaturan Jam Kerja: {tipeJadwal.nama_tipe}
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-[var(--text-muted)] mt-1">
             Atur jam masuk dan pulang harian atau shift dinamis khusus untuk tipe jadwal ini.
           </p>
         </div>

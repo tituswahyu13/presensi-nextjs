@@ -107,23 +107,23 @@ export default function JadwalSumberClient({ pegawais, jadwals, tipeJadwalList, 
 
   return (
     <div className="flex flex-col">
-      <div className="p-6 border-b border-gray-100 bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 border-b border-[var(--border)] bg-[var(--bg-card)] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <div className="flex items-center gap-3">
-            <label className="font-semibold text-gray-700">Pilih Bulan:</label>
+            <label className="font-semibold text-[var(--text-primary)]">Pilih Bulan:</label>
             <input 
               type="month" 
               value={selectedMonth}
               onChange={handleMonthChange}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500"
+              className="px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500"
             />
           </div>
           <div className="flex items-center gap-3">
-            <label className="font-semibold text-gray-700">Tipe Jadwal:</label>
+            <label className="font-semibold text-[var(--text-primary)]">Tipe Jadwal:</label>
             <select
               value={activeTipeId || ""}
               onChange={handleTipeChange}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 bg-white"
+              className="px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 bg-[var(--bg-surface)]"
             >
               {tipeJadwalList.map(t => (
                 <option key={t.id} value={t.id}>{t.nama_tipe}</option>
@@ -164,11 +164,11 @@ export default function JadwalSumberClient({ pegawais, jadwals, tipeJadwalList, 
 
       <div className="p-6 overflow-x-auto">
         <table className="w-full text-sm text-left border-collapse min-w-[800px]">
-          <thead className="bg-gray-100 text-gray-700 uppercase">
+          <thead className="bg-slate-700 text-white border border-slate-600 uppercase">
             <tr>
-              <th className="px-4 py-3 border border-gray-200 sticky left-0 bg-gray-100 z-10 w-64 min-w-[200px]">Nama Pegawai</th>
+              <th className="px-4 py-3 border border-[var(--border)] sticky left-0 bg-gray-100 z-10 w-64 min-w-[200px]">Nama Pegawai</th>
               {daysArray.map(day => (
-                <th key={day} className="px-2 py-3 border border-gray-200 text-center min-w-[40px]">
+                <th key={day} className="px-2 py-3 border border-[var(--border)] text-center min-w-[40px]">
                   {day}
                 </th>
               ))}
@@ -177,17 +177,17 @@ export default function JadwalSumberClient({ pegawais, jadwals, tipeJadwalList, 
           <tbody>
             {pegawais.map(pegawai => (
               <tr key={pegawai.id} className="hover:bg-cyan-50/50 transition-colors">
-                <td className="px-4 py-2 border border-gray-200 sticky left-0 bg-white font-medium text-gray-900 z-10">
+                <td className="px-4 py-2 border border-[var(--border)] sticky left-0 bg-[var(--bg-surface)] font-medium text-[var(--text-primary)] z-10">
                   {pegawai.nama}
                 </td>
                 {daysArray.map(day => (
-                  <td key={day} className="p-1 border border-gray-200 text-center">
+                  <td key={day} className="p-1 border border-[var(--border)] text-center">
                     <input
                       type="text"
                       maxLength={1}
                       value={gridData[pegawai.id]?.[day] || ""}
                       onChange={(e) => handleInputChange(pegawai.id, day, e.target.value)}
-                      className="w-full text-center p-1 uppercase border border-transparent hover:border-gray-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded"
+                      className="w-full text-center p-1 uppercase border border-transparent hover:border-[var(--border)] focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded"
                     />
                   </td>
                 ))}
@@ -195,7 +195,7 @@ export default function JadwalSumberClient({ pegawais, jadwals, tipeJadwalList, 
             ))}
             {pegawais.length === 0 && (
               <tr>
-                <td colSpan={daysInMonth + 1} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={daysInMonth + 1} className="px-6 py-8 text-center text-[var(--text-muted)]">
                   Tidak ada data pegawai
                 </td>
               </tr>
@@ -204,7 +204,7 @@ export default function JadwalSumberClient({ pegawais, jadwals, tipeJadwalList, 
         </table>
       </div>
 
-      <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      <div className="p-6 border-t border-[var(--border)] bg-[var(--bg-card)] flex justify-end sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <button
           onClick={handleSubmit}
           disabled={loading}

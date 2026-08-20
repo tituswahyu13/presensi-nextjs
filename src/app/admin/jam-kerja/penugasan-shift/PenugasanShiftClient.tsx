@@ -142,14 +142,14 @@ export default function PenugasanShiftClient({
 
   return (
     <div className="flex flex-col">
-      <div className="p-6 border-b border-gray-100 bg-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 border-b border-[var(--border)] bg-[var(--bg-card)] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-3">
-            <label className="font-semibold text-gray-700">Tipe Jadwal:</label>
+            <label className="font-semibold text-[var(--text-primary)]">Tipe Jadwal:</label>
             <select 
               value={activeTipeJadwal?.id || ""}
               onChange={(e) => handleFilterChange("tipe", e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 min-w-[200px]"
+              className="px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 min-w-[200px]"
             >
               <option value="">-- Pilih Tipe Jadwal --</option>
               {tipeJadwals.map(t => (
@@ -159,12 +159,12 @@ export default function PenugasanShiftClient({
           </div>
 
           <div className="flex items-center gap-3">
-            <label className="font-semibold text-gray-700">Pilih Bulan:</label>
+            <label className="font-semibold text-[var(--text-primary)]">Pilih Bulan:</label>
             <input 
               type="month" 
               value={selectedMonth}
               onChange={(e) => handleFilterChange("month", e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500"
+              className="px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500"
             />
           </div>
         </div>
@@ -194,14 +194,14 @@ export default function PenugasanShiftClient({
       )}
 
       {!activeTipeJadwal ? (
-        <div className="p-12 text-center text-gray-500">
+        <div className="p-12 text-center text-[var(--text-muted)]">
           Silakan pilih Tipe Jadwal terlebih dahulu untuk melihat daftar pegawai dan mengatur shift.
         </div>
       ) : shiftRules.length === 0 ? (
         <div className="p-12 text-center text-red-500 flex flex-col items-center">
           <AlertCircle className="w-12 h-12 mb-4 text-red-400" />
           <p className="font-medium text-lg">Tidak Ada Aturan Shift</p>
-          <p className="mt-2 text-gray-600 max-w-md">
+          <p className="mt-2 text-[var(--text-secondary)] max-w-md">
             Tipe Jadwal <strong>{activeTipeJadwal.nama_tipe}</strong> belum memiliki aturan shift dinamis. 
             Silakan tambahkan aturan shift di menu Master Tipe Jadwal terlebih dahulu.
           </p>
@@ -221,11 +221,11 @@ export default function PenugasanShiftClient({
           </div>
 
           <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
-            <thead className="bg-gray-100 text-gray-700 uppercase">
+            <thead className="bg-slate-700 text-white border border-slate-600 uppercase">
               <tr>
-                <th className="px-4 py-3 border border-gray-200 sticky left-0 bg-gray-100 z-10 w-64 min-w-[200px]">Nama Pegawai</th>
+                <th className="px-4 py-3 border border-[var(--border)] sticky left-0 bg-gray-100 z-10 w-64 min-w-[200px]">Nama Pegawai</th>
                 {daysArray.map(day => (
-                  <th key={day} className="px-1 py-3 border border-gray-200 text-center min-w-[50px] text-xs">
+                  <th key={day} className="px-1 py-3 border border-[var(--border)] text-center min-w-[50px] text-xs">
                     {day}
                   </th>
                 ))}
@@ -234,17 +234,17 @@ export default function PenugasanShiftClient({
             <tbody>
               {pegawais.map(pegawai => (
                 <tr key={pegawai.id} className="hover:bg-cyan-50/50 transition-colors">
-                  <td className="px-4 py-2 border border-gray-200 sticky left-0 bg-white font-medium text-gray-900 z-10 truncate max-w-[200px]" title={pegawai.nama}>
+                  <td className="px-4 py-2 border border-[var(--border)] sticky left-0 bg-[var(--bg-surface)] font-medium text-[var(--text-primary)] z-10 truncate max-w-[200px]" title={pegawai.nama}>
                     {pegawai.nama}
                   </td>
                   {daysArray.map(day => (
-                    <td key={day} className="p-0.5 border border-gray-200 text-center">
+                    <td key={day} className="p-0.5 border border-[var(--border)] text-center">
                       <input
                         type="text"
                         maxLength={1}
                         value={gridData[pegawai.id]?.[day] || ""}
                         onChange={(e) => handleInputChange(pegawai.id, day, e.target.value)}
-                        className="w-full text-center p-1 text-xs uppercase border border-transparent hover:border-gray-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded bg-transparent"
+                        className="w-full text-center p-1 text-xs uppercase border border-transparent hover:border-[var(--border)] focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded bg-transparent"
                         title={gridData[pegawai.id]?.[day] ? shiftRules.find(r => r.tipe_hari.substring(0, 1).toUpperCase() === gridData[pegawai.id]?.[day])?.tipe_hari || "Tidak Valid" : ""}
                       />
                     </td>
@@ -253,7 +253,7 @@ export default function PenugasanShiftClient({
               ))}
               {pegawais.length === 0 && (
                 <tr>
-                  <td colSpan={daysInMonth + 1} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={daysInMonth + 1} className="px-6 py-8 text-center text-[var(--text-muted)]">
                     Tidak ada data pegawai untuk tipe jadwal ini.
                   </td>
                 </tr>
@@ -264,7 +264,7 @@ export default function PenugasanShiftClient({
       )}
 
       {activeTipeJadwal && shiftRules.length > 0 && (
-        <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div className="p-6 border-t border-[var(--border)] bg-[var(--bg-card)] flex justify-end sticky bottom-0 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
           <button
             onClick={handleSubmit}
             disabled={loading}

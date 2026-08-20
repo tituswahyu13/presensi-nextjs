@@ -84,37 +84,37 @@ export default function JamKerjaShiftFormClient({ initialData }: { initialData: 
       )}
 
       {sections.map((section, index) => (
-        <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-gray-50 border-b border-gray-100 px-6 py-4 flex items-center gap-3">
-            <div className="p-2 bg-white rounded-lg shadow-sm text-cyan-600">
+        <div key={index} className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden">
+          <div className="bg-[var(--bg-card)] border-b border-[var(--border)] px-6 py-4 flex items-center gap-3">
+            <div className="p-2 bg-[var(--bg-surface)] rounded-lg shadow-sm text-cyan-600">
               {section.icon}
             </div>
-            <h2 className="text-lg font-bold text-gray-800">{section.title}</h2>
+            <h2 className="text-lg font-bold text-[var(--text-primary)]">{section.title}</h2>
           </div>
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {section.fields.map((field, fIdx) => (
-                <div key={fIdx} className="space-y-4 p-4 rounded-lg bg-gray-50 border border-gray-100">
-                  <h3 className="font-semibold text-gray-700 pb-2 border-b border-gray-200">
+                <div key={fIdx} className="space-y-4 p-4 rounded-lg bg-[var(--bg-card)] border border-[var(--border)]">
+                  <h3 className="font-semibold text-[var(--text-primary)] pb-2 border-b border-[var(--border)]">
                     Shift {field.label}
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col">
-                      <label className="text-sm font-medium text-gray-600 mb-1">Jam Masuk</label>
+                      <label className="text-sm font-medium text-[var(--text-secondary)] mb-1">Jam Masuk</label>
                       <input
                         type="time"
                         name={field.masuk}
                         defaultValue={initialData[field.masuk]}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors bg-white"
+                        className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors bg-[var(--bg-surface)]"
                       />
                     </div>
                     <div className="flex flex-col">
-                      <label className="text-sm font-medium text-gray-600 mb-1">Jam Pulang</label>
+                      <label className="text-sm font-medium text-[var(--text-secondary)] mb-1">Jam Pulang</label>
                       <input
                         type="time"
                         name={field.pulang}
                         defaultValue={initialData[field.pulang]}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors bg-white"
+                        className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors bg-[var(--bg-surface)]"
                       />
                     </div>
                   </div>
@@ -125,7 +125,7 @@ export default function JamKerjaShiftFormClient({ initialData }: { initialData: 
         </div>
       ))}
 
-      <div className="flex justify-end sticky bottom-6 z-10 bg-white/80 backdrop-blur-md p-4 rounded-xl border border-gray-200 shadow-sm">
+      <div className="flex justify-end sticky bottom-6 z-10 bg-[var(--bg-surface)]/80 backdrop-blur-md p-4 rounded-xl border border-[var(--border)] shadow-sm">
         <button
           type="submit"
           disabled={loading}

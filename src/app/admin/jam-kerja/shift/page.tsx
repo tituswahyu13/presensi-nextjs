@@ -38,11 +38,11 @@ export default async function JamKerjaShiftPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <Clock className="w-6 h-6 text-cyan-500" />
             Jam Kerja Shift
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-[var(--text-muted)] mt-1">
             Pengaturan jadwal kerja untuk berbagai lokasi dan posisi.
           </p>
         </div>

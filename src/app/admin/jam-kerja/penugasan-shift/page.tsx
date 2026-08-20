@@ -79,16 +79,16 @@ export default async function PenugasanShiftPage({
   return (
     <div className="max-w-[100vw] mx-auto overflow-hidden">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
           <CalendarDays className="w-6 h-6 text-cyan-500" />
           Penugasan Shift Bulanan
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-[var(--text-muted)] mt-1">
           Atur jadwal shift dinamis bulanan untuk pegawai berdasarkan Tipe Jadwal masing-masing.
         </p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden">
         <PenugasanShiftClient 
           tipeJadwals={tipeJadwals}
           activeTipeJadwal={activeTipeJadwal}

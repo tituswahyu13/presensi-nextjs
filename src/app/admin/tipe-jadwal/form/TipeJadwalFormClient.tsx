@@ -47,7 +47,7 @@ export default function TipeJadwalFormClient({ initialData, isEdit }: TipeJadwal
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6 max-w-2xl">
+    <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden p-6 max-w-2xl">
       {error && (
         <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
           {error}
@@ -57,7 +57,7 @@ export default function TipeJadwalFormClient({ initialData, isEdit }: TipeJadwal
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="p-6 space-y-5">
           <div>
-            <label className="text-sm font-medium text-gray-700">Nama Tipe Jadwal</label>
+            <label className="text-sm font-medium text-[var(--text-primary)]">Nama Tipe Jadwal</label>
             <input 
               type="text" 
               name="nama_tipe" 
@@ -65,15 +65,15 @@ export default function TipeJadwalFormClient({ initialData, isEdit }: TipeJadwal
               onChange={handleChange}
               required
               placeholder="Contoh: Kantor, Satpam, dsb"
-              className="mt-1 w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
+              className="mt-1 w-full px-4 py-2 bg-[var(--bg-card)] border border-[var(--border)] rounded-lg focus:bg-[var(--bg-surface)] focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition-all"
             />
           </div>
         </div>
 
-        <div className="flex gap-3 pt-6 border-t border-gray-100">
+        <div className="flex gap-3 pt-6 border-t border-[var(--border)]">
           <Link 
             href="/admin/tipe-jadwal"
-            className="px-5 py-2.5 rounded-lg font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors flex items-center gap-2"
+            className="px-5 py-2.5 rounded-lg font-medium text-white bg-slate-700 hover:bg-slate-600 border border-slate-600 transition-colors text-white flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
             Batal

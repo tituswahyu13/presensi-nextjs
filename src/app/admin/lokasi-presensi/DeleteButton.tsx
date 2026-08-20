@@ -22,7 +22,7 @@ export default function DeleteButton({ id, lokasiName }: { id: number; lokasiNam
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="px-3 py-1.5 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition-colors font-medium text-xs border border-red-100 flex items-center justify-center"
+        className="px-3 py-1.5 bg-red-50  rounded-md hover:bg-red-900/30 text-red-400 hover:bg-red-900/50 border border-transparent hover:border-red-800/50 transition-colors font-medium text-xs border border-red-100 flex items-center justify-center"
       >
         Hapus
       </button>
@@ -31,18 +31,18 @@ export default function DeleteButton({ id, lokasiName }: { id: number; lokasiNam
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div 
-            className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200"
+            className="bg-[var(--bg-surface)] rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gray-50/50">
-              <div className="flex items-center gap-2 text-red-600">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border)] bg-[var(--bg-card)]/50">
+              <div className="flex items-center gap-2 ">
                 <AlertTriangle className="w-5 h-5" />
-                <h3 className="font-semibold text-gray-900">Konfirmasi Hapus</h3>
+                <h3 className="font-semibold text-[var(--text-primary)]">Konfirmasi Hapus</h3>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 hover:bg-gray-200"
+                className="text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors rounded-full p-1 hover:bg-slate-600"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -50,20 +50,20 @@ export default function DeleteButton({ id, lokasiName }: { id: number; lokasiNam
 
             {/* Body */}
             <div className="p-6">
-              <p className="text-gray-600 text-sm">
-                Apakah Anda yakin ingin menghapus data lokasi presensi <span className="font-bold text-gray-900">"{lokasiName}"</span>?
+              <p className="text-[var(--text-secondary)] text-sm">
+                Apakah Anda yakin ingin menghapus data lokasi presensi <span className="font-bold text-[var(--text-primary)]">"{lokasiName}"</span>?
               </p>
-              <p className="text-gray-500 text-xs mt-2 italic">
+              <p className="text-[var(--text-muted)] text-xs mt-2 italic">
                 Data yang dihapus akan disembunyikan (soft delete) dari sistem.
               </p>
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-3 p-4 border-t border-gray-100 bg-gray-50">
+            <div className="flex items-center justify-end gap-3 p-4 border-t border-[var(--border)] bg-[var(--bg-card)]">
               <button
                 onClick={() => setIsOpen(false)}
                 disabled={loading}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium text-[var(--text-primary)] bg-[var(--bg-surface)] border border-[var(--border)] rounded-lg hover:bg-[var(--bg-card)] transition-colors disabled:opacity-50"
               >
                 Batal
               </button>

@@ -15,7 +15,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="animate-pulse flex flex-col items-center">
         <div className="h-12 w-12 bg-blue-200 rounded-full mb-4"></div>
-        <p className="text-gray-500 font-medium">Mengarahkan ke Portal SSO...</p>
+        <p className="text-[var(--text-muted)] font-medium">Mengarahkan ke Portal SSO...</p>
       </div>
     </div>
   );

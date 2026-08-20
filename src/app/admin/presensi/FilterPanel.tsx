@@ -41,23 +41,23 @@ export default function FilterPanel({ bagianList, defaultDate, defaultBagian }: 
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-wrap gap-4 items-end">
+    <div className="bg-[var(--bg-surface)] p-4 rounded-xl shadow-sm border border-[var(--border)] mb-6 flex flex-wrap gap-4 items-end">
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-gray-600">Pilih Tanggal</label>
+        <label className="text-sm font-semibold text-[var(--text-secondary)]">Pilih Tanggal</label>
         <input 
           type="date" 
           value={date}
           onChange={handleDateChange}
-          className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+          className="border border-[var(--border)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:ring-2 focus:ring-cyan-500 focus:outline-none"
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-gray-600">Filter Bagian</label>
+        <label className="text-sm font-semibold text-[var(--text-secondary)]">Filter Bagian</label>
         <select 
           value={bagian}
           onChange={handleBagianChange}
-          className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:ring-2 focus:ring-cyan-500 focus:outline-none min-w-[200px]"
+          className="border border-[var(--border)] rounded-lg px-4 py-2 text-[var(--text-primary)] focus:ring-2 focus:ring-cyan-500 focus:outline-none min-w-[200px]"
         >
           <option value="">Semua Bagian</option>
           {bagianList.map((b) => (

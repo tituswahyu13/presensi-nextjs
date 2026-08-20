@@ -108,7 +108,7 @@ export default function PegawaiDashboard() {
 
       {/* Clock Card (HIG Style) */}
       <div className="bg-white rounded-2xl p-6 text-center shadow-sm">
-        <p className="text-gray-500 text-[13px] font-medium mb-1 uppercase tracking-wider">
+        <p className="text-[var(--text-muted)] text-[13px] font-medium mb-1 uppercase tracking-wider">
           {time ? formatDate(time) : "Memuat..."}
         </p>
         <h1 className="text-5xl font-semibold tracking-tight text-black mb-2 font-mono">
@@ -116,7 +116,7 @@ export default function PegawaiDashboard() {
           <span className="opacity-50">:</span>
           {time ? formatTime(time).split(":")[1] : "--"}
         </h1>
-        <div className="flex items-center justify-center gap-1.5 text-sm text-gray-500 mb-6">
+        <div className="flex items-center justify-center gap-1.5 text-sm text-[var(--text-muted)] mb-6">
           <MapPin size={14} className="text-gray-400" />
           <span className="truncate max-w-[250px]">{locationName}</span>
         </div>
@@ -127,7 +127,7 @@ export default function PegawaiDashboard() {
               <div className="bg-[#007AFF]/10 p-2 rounded-lg text-[#007AFF]">
                 <Map size={20} />
               </div>
-              <span className="font-medium text-[14px] text-gray-800">Riwayat</span>
+              <span className="font-medium text-[14px] text-[var(--text-primary)]">Riwayat</span>
             </div>
             <ArrowRight size={16} className="text-gray-400" />
           </Link>
@@ -137,7 +137,7 @@ export default function PegawaiDashboard() {
               <div className="bg-[#34C759]/10 p-2 rounded-lg text-[#34C759]">
                 <FileText size={20} />
               </div>
-              <span className="font-medium text-[14px] text-gray-800">Ijin/Cuti</span>
+              <span className="font-medium text-[14px] text-[var(--text-primary)]">Ijin/Cuti</span>
             </div>
             <ArrowRight size={16} className="text-gray-400" />
           </Link>
@@ -156,7 +156,7 @@ export default function PegawaiDashboard() {
               <i className="fas fa-check text-2xl"></i>
             </div>
             <h3 className="font-semibold text-black text-[17px]">Semua Selesai</h3>
-            <p className="text-[13px] text-gray-500">Terima kasih atas kerja ekstra Anda hari ini.</p>
+            <p className="text-[13px] text-[var(--text-muted)]">Terima kasih atas kerja ekstra Anda hari ini.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4">
@@ -187,7 +187,7 @@ export default function PegawaiDashboard() {
                     <i className="fas fa-check text-2xl"></i>
                   </div>
                   <h3 className="font-semibold text-black text-[17px]">Pekerjaan Selesai</h3>
-                  <p className="text-[13px] text-gray-500">Anda dapat memulai lembur jika ada jadwal.</p>
+                  <p className="text-[13px] text-[var(--text-muted)]">Anda dapat memulai lembur jika ada jadwal.</p>
                 </div>
                 <Link href="/pegawai/presensi?type=masuk_lembur" className="bg-[#FF9500] hover:bg-[#e68600] active:bg-[#cc7700] transition-colors rounded-[14px] p-4 flex items-center justify-center gap-2 text-white shadow-sm">
                   <Clock size={22} />
@@ -247,7 +247,7 @@ export default function PegawaiDashboard() {
       <div className="bg-white rounded-2xl p-5 shadow-sm">
         <div className="flex justify-between items-center mb-5">
           <h3 className="font-semibold text-black text-[15px]">Aktivitas Hari Ini</h3>
-          <span className={`px-2 py-1 rounded-md text-[11px] font-semibold ${statusHariIni?.status === "Belum Presensi" ? "bg-gray-100 text-gray-600" :
+          <span className={`px-2 py-1 rounded-md text-[11px] font-semibold ${statusHariIni?.status === "Belum Presensi" ? "bg-gray-100 text-[var(--text-secondary)]" :
               statusHariIni?.status === "Sedang Bekerja" ? "bg-[#007AFF]/10 text-[#007AFF]" :
                 "bg-[#34C759]/10 text-[#34C759]"
             }`}>
@@ -255,13 +255,13 @@ export default function PegawaiDashboard() {
           </span>
         </div>
 
-        <div className="space-y-4 relative before:absolute before:inset-0 before:ml-[19px] before:-translate-x-px before:h-full before:w-0.5 before:bg-gray-200">
+        <div className="space-y-4 relative before:absolute before:inset-0 before:ml-[19px] before:-translate-x-px before:h-full before:w-0.5 before:bg-slate-600">
           <div className="relative flex items-center gap-4 group">
             <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 border-white z-10 shrink-0 ${statusHariIni?.jam_masuk ? 'bg-[#007AFF]/10 text-[#007AFF]' : 'bg-gray-100 text-gray-400'}`}>
               <span className={`h-2.5 w-2.5 rounded-full ${statusHariIni?.jam_masuk ? 'bg-[#007AFF]' : 'bg-gray-300'}`}></span>
             </div>
             <div className="flex-1 py-1">
-              <p className="text-[13px] text-gray-500 mb-0.5">Presensi Masuk</p>
+              <p className="text-[13px] text-[var(--text-muted)] mb-0.5">Presensi Masuk</p>
               <h4 className={`text-[17px] font-semibold ${statusHariIni?.jam_masuk ? 'text-black' : 'text-gray-400'}`}>
                 {statusHariIni?.jam_masuk || "--:--"}
               </h4>
@@ -273,7 +273,7 @@ export default function PegawaiDashboard() {
               <span className={`h-2.5 w-2.5 rounded-full ${statusHariIni?.jam_keluar ? 'bg-[#34C759]' : 'bg-gray-300'}`}></span>
             </div>
             <div className="flex-1 py-1">
-              <p className="text-[13px] text-gray-500 mb-0.5">Presensi Keluar</p>
+              <p className="text-[13px] text-[var(--text-muted)] mb-0.5">Presensi Keluar</p>
               <h4 className={`text-[17px] font-semibold ${statusHariIni?.jam_keluar ? 'text-black' : 'text-gray-400'}`}>
                 {statusHariIni?.jam_keluar || "--:--"}
               </h4>
@@ -287,7 +287,7 @@ export default function PegawaiDashboard() {
                   <span className={`h-2.5 w-2.5 rounded-full ${statusHariIni?.jam_masuk_lembur ? 'bg-[#FF9500]' : 'bg-gray-300'}`}></span>
                 </div>
                 <div className="flex-1 py-1">
-                  <p className="text-[13px] text-gray-500 mb-0.5">Mulai Lembur</p>
+                  <p className="text-[13px] text-[var(--text-muted)] mb-0.5">Mulai Lembur</p>
                   <h4 className={`text-[17px] font-semibold ${statusHariIni?.jam_masuk_lembur ? 'text-black' : 'text-gray-400'}`}>
                     {statusHariIni?.jam_masuk_lembur || "--:--"}
                   </h4>
@@ -299,7 +299,7 @@ export default function PegawaiDashboard() {
                   <span className={`h-2.5 w-2.5 rounded-full ${statusHariIni?.jam_keluar_lembur ? 'bg-[#FF3B30]' : 'bg-gray-300'}`}></span>
                 </div>
                 <div className="flex-1 py-1">
-                  <p className="text-[13px] text-gray-500 mb-0.5">Selesai Lembur</p>
+                  <p className="text-[13px] text-[var(--text-muted)] mb-0.5">Selesai Lembur</p>
                   <h4 className={`text-[17px] font-semibold ${statusHariIni?.jam_keluar_lembur ? 'text-black' : 'text-gray-400'}`}>
                     {statusHariIni?.jam_keluar_lembur || "--:--"}
                   </h4>

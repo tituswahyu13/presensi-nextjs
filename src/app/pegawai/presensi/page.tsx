@@ -382,7 +382,7 @@ export default function PresensiPage() {
         {/* Shift Selection Section */}
         {isMasuk && shiftOptions.length > 0 && (
           <div className="bg-white p-4 rounded-2xl shadow-sm space-y-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Pilih Shift Anda
             </label>
             <div className="relative">
@@ -397,7 +397,7 @@ export default function PresensiPage() {
                   </option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[var(--text-muted)]">
                 <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
               </div>
             </div>
@@ -452,7 +452,7 @@ export default function PresensiPage() {
                 <button
                   onClick={retakePhoto}
                   disabled={submitting}
-                  className="flex-1 py-3.5 px-4 bg-gray-100 text-black font-semibold rounded-[14px] flex items-center justify-center gap-2 active:bg-gray-200"
+                  className="flex-1 py-3.5 px-4 bg-gray-100 text-black font-semibold rounded-[14px] flex items-center justify-center gap-2 active:bg-slate-600"
                 >
                   <X size={20} /> Ulangi
                 </button>
@@ -477,7 +477,7 @@ export default function PresensiPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-black text-[15px]">Lokasi Anda</h3>
-                <p className="text-[11px] text-gray-500">Sistem memverifikasi lokasi secara otomatis</p>
+                <p className="text-[11px] text-[var(--text-muted)]">Sistem memverifikasi lokasi secara otomatis</p>
               </div>
             </div>
             {location && officeLocation && (() => {
@@ -528,8 +528,8 @@ export default function PresensiPage() {
             <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-5">
               <Check size={40} strokeWidth={3} />
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">Berhasil!</h2>
-            <p className="text-gray-500 text-center text-sm font-medium leading-relaxed">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2 text-center">Berhasil!</h2>
+            <p className="text-[var(--text-muted)] text-center text-sm font-medium leading-relaxed">
               {successMsg}
             </p>
           </div>

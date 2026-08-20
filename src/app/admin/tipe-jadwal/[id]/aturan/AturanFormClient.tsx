@@ -81,9 +81,9 @@ export default function AturanFormClient({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+    <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden">
+      <div className="p-6 border-b border-[var(--border)] flex items-center justify-between">
+        <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
           <Clock className="w-5 h-5 text-cyan-500" />
           Daftar Aturan Jam Kerja
         </h2>
@@ -98,7 +98,7 @@ export default function AturanFormClient({
       <div className="p-6">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-gray-50 text-gray-700 uppercase">
+            <thead className="bg-[var(--bg-card)] text-[var(--text-primary)] uppercase">
               <tr>
                 <th className="px-4 py-3 rounded-tl-lg">Tipe (Reguler/Shift)</th>
                 <th className="px-4 py-3">Hari / Nama Shift</th>
@@ -112,7 +112,7 @@ export default function AturanFormClient({
                 <tr className="bg-cyan-50/30">
                   <td className="px-4 py-3">
                     <select 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500"
+                      className="w-full px-3 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500"
                       value={newRow.is_shift ? "true" : "false"}
                       onChange={(e) => setNewRow({...newRow, is_shift: e.target.value === "true", tipe_hari: e.target.value === "true" ? "Pagi" : "Senin"})}
                     >
@@ -125,7 +125,7 @@ export default function AturanFormClient({
                       <select 
                         value={newRow.tipe_hari} 
                         onChange={(e) => setNewRow({...newRow, tipe_hari: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-3 py-2 border border-[var(--border)] rounded-lg"
                       >
                         <option value="Pagi">Pagi</option>
                         <option value="Siang">Siang</option>
@@ -137,7 +137,7 @@ export default function AturanFormClient({
                       <select 
                         value={newRow.tipe_hari} 
                         onChange={(e) => setNewRow({...newRow, tipe_hari: e.target.value})}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                        className="w-full px-3 py-2 border border-[var(--border)] rounded-lg"
                       >
                         {["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"].map(d => (
                           <option key={d} value={d}>{d}</option>
@@ -146,17 +146,17 @@ export default function AturanFormClient({
                     )}
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <input type="time" value={newRow.jam_masuk} onChange={(e) => setNewRow({...newRow, jam_masuk: e.target.value})} className="px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <input type="time" value={newRow.jam_masuk} onChange={(e) => setNewRow({...newRow, jam_masuk: e.target.value})} className="px-3 py-2 border border-[var(--border)] rounded-lg text-center" />
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <input type="time" value={newRow.jam_pulang} onChange={(e) => setNewRow({...newRow, jam_pulang: e.target.value})} className="px-3 py-2 border border-gray-300 rounded-lg text-center" />
+                    <input type="time" value={newRow.jam_pulang} onChange={(e) => setNewRow({...newRow, jam_pulang: e.target.value})} className="px-3 py-2 border border-[var(--border)] rounded-lg text-center" />
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end gap-2">
                       <button onClick={handleAdd} disabled={loading === -1} className="p-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
                         {loading === -1 ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                       </button>
-                      <button onClick={() => setIsAdding(false)} className="p-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                      <button onClick={() => setIsAdding(false)} className="p-2 bg-[var(--bg-card)]0 text-white rounded-lg hover:bg-gray-600">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -165,10 +165,10 @@ export default function AturanFormClient({
               )}
 
               {aturan.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50/50">
+                <tr key={item.id} className="hover:bg-[var(--bg-card)]/50">
                   <td className="px-4 py-3">
                     <select 
-                      className="w-full px-3 py-2 border border-transparent hover:border-gray-300 focus:border-cyan-500 rounded-lg bg-transparent"
+                      className="w-full px-3 py-2 border border-transparent hover:border-[var(--border)] focus:border-cyan-500 rounded-lg bg-transparent"
                       value={item.is_shift ? "true" : "false"}
                       onChange={(e) => handleUpdate(item, 'is_shift', e.target.value === "true")}
                       onBlur={() => saveUpdate(item)}
@@ -183,7 +183,7 @@ export default function AturanFormClient({
                         value={item.tipe_hari} 
                         onChange={(e) => handleUpdate(item, 'tipe_hari', e.target.value)}
                         onBlur={() => saveUpdate(item)}
-                        className="w-full px-3 py-2 border border-transparent hover:border-gray-300 focus:border-cyan-500 rounded-lg bg-transparent"
+                        className="w-full px-3 py-2 border border-transparent hover:border-[var(--border)] focus:border-cyan-500 rounded-lg bg-transparent"
                       >
                         <option value="Pagi">Pagi</option>
                         <option value="Siang">Siang</option>
@@ -196,7 +196,7 @@ export default function AturanFormClient({
                         value={item.tipe_hari} 
                         onChange={(e) => handleUpdate(item, 'tipe_hari', e.target.value)}
                         onBlur={() => saveUpdate(item)}
-                        className="w-full px-3 py-2 border border-transparent hover:border-gray-300 focus:border-cyan-500 rounded-lg bg-transparent"
+                        className="w-full px-3 py-2 border border-transparent hover:border-[var(--border)] focus:border-cyan-500 rounded-lg bg-transparent"
                       >
                         {["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"].map(d => (
                           <option key={d} value={d}>{d}</option>
@@ -210,7 +210,7 @@ export default function AturanFormClient({
                       value={item.jam_masuk} 
                       onChange={(e) => handleUpdate(item, 'jam_masuk', e.target.value)} 
                       onBlur={() => saveUpdate(item)}
-                      className="px-3 py-2 border border-transparent hover:border-gray-300 focus:border-cyan-500 rounded-lg text-center bg-transparent" 
+                      className="px-3 py-2 border border-transparent hover:border-[var(--border)] focus:border-cyan-500 rounded-lg text-center bg-transparent" 
                     />
                   </td>
                   <td className="px-4 py-3 text-center">
@@ -219,7 +219,7 @@ export default function AturanFormClient({
                       value={item.jam_pulang} 
                       onChange={(e) => handleUpdate(item, 'jam_pulang', e.target.value)} 
                       onBlur={() => saveUpdate(item)}
-                      className="px-3 py-2 border border-transparent hover:border-gray-300 focus:border-cyan-500 rounded-lg text-center bg-transparent" 
+                      className="px-3 py-2 border border-transparent hover:border-[var(--border)] focus:border-cyan-500 rounded-lg text-center bg-transparent" 
                     />
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -237,7 +237,7 @@ export default function AturanFormClient({
 
               {aturan.length === 0 && !isAdding && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                  <td colSpan={5} className="px-4 py-8 text-center text-[var(--text-muted)]">
                     Belum ada aturan jam kerja untuk Tipe Jadwal ini.
                   </td>
                 </tr>

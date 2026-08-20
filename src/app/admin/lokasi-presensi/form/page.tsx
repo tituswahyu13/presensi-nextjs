@@ -21,10 +21,10 @@ export default async function AdminLokasiFormPage({
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">
           {isEdit ? "Edit Lokasi Presensi" : "Tambah Lokasi Presensi"}
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-[var(--text-muted)] mt-1">
           {isEdit 
             ? "Perbarui informasi dan titik koordinat lokasi presensi." 
             : "Masukkan detail lokasi dan tentukan titik koordinat presensi pada peta."}

@@ -25,17 +25,17 @@ export default async function JadwalSumberPage({
     <div className="max-w-full mx-auto space-y-6">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <CalendarDays className="w-6 h-6 text-cyan-500" />
             Jadwal Harian Pegawai
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-[var(--text-muted)] mt-1">
             Pengaturan jadwal kerja harian (shift A/B/Malam) per bulan.
           </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden">
         <JadwalSumberClient 
           pegawais={pegawais} 
           jadwals={jadwals} 

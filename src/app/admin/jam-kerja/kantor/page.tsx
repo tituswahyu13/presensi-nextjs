@@ -33,17 +33,17 @@ export default async function JamKerjaKantorPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <Clock className="w-6 h-6 text-cyan-500" />
             Jam Kerja Kantor
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-[var(--text-muted)] mt-1">
             Pengaturan jam masuk dan jam pulang harian untuk kantor.
           </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden">
         <JamKerjaKantorFormClient initialData={initialData} />
       </div>
     </div>

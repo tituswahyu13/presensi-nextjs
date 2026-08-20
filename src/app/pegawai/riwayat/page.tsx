@@ -47,7 +47,7 @@ export default function RiwayatPage() {
       case "Sedang Lembur":
         return "bg-orange-100 text-orange-700";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-[var(--text-primary)]";
     }
   };
 
@@ -58,8 +58,8 @@ export default function RiwayatPage() {
           <History size={24} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Riwayat</h1>
-          <p className="text-gray-500 text-sm">30 hari terakhir</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Riwayat</h1>
+          <p className="text-[var(--text-muted)] text-sm">30 hari terakhir</p>
         </div>
       </div>
 
@@ -73,8 +73,8 @@ export default function RiwayatPage() {
           <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
             <Calendar size={32} />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">Belum Ada Riwayat</h3>
-          <p className="text-gray-500 text-sm leading-relaxed">
+          <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">Belum Ada Riwayat</h3>
+          <p className="text-[var(--text-muted)] text-sm leading-relaxed">
             Data presensi Anda dalam 30 hari terakhir masih kosong.
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function RiwayatPage() {
               {/* Header Card */}
               <div className="flex justify-between items-start mb-4 border-b border-gray-100 pb-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{formatDate(item.tanggal)}</h3>
+                  <h3 className="font-semibold text-[var(--text-primary)]">{formatDate(item.tanggal)}</h3>
                   <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold mt-2 ${getStatusColor(item.status)}`}>
                     <CheckCircle2 size={12} />
                     {item.status}
@@ -97,17 +97,17 @@ export default function RiwayatPage() {
               <div className="grid grid-cols-2 gap-y-4 gap-x-2">
                 {/* Jam Kerja Regular */}
                 <div>
-                  <p className="text-[11px] text-gray-500 mb-1 font-medium uppercase tracking-wider">Masuk</p>
+                  <p className="text-[11px] text-[var(--text-muted)] mb-1 font-medium uppercase tracking-wider">Masuk</p>
                   <div className="flex items-center gap-2">
                     <Clock size={14} className="text-gray-400" />
-                    <span className="font-semibold text-gray-900">{item.jam_masuk || '--:--'}</span>
+                    <span className="font-semibold text-[var(--text-primary)]">{item.jam_masuk || '--:--'}</span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-[11px] text-gray-500 mb-1 font-medium uppercase tracking-wider">Pulang</p>
+                  <p className="text-[11px] text-[var(--text-muted)] mb-1 font-medium uppercase tracking-wider">Pulang</p>
                   <div className="flex items-center gap-2">
                     <Clock size={14} className="text-gray-400" />
-                    <span className="font-semibold text-gray-900">{item.jam_keluar || '--:--'}</span>
+                    <span className="font-semibold text-[var(--text-primary)]">{item.jam_keluar || '--:--'}</span>
                   </div>
                 </div>
 
@@ -119,14 +119,14 @@ export default function RiwayatPage() {
                       <p className="text-[11px] text-orange-500 mb-1 font-medium uppercase tracking-wider">Masuk Lembur</p>
                       <div className="flex items-center gap-2">
                         <Clock size={14} className="text-orange-300" />
-                        <span className="font-semibold text-gray-900">{item.jam_masuk_lembur || '--:--'}</span>
+                        <span className="font-semibold text-[var(--text-primary)]">{item.jam_masuk_lembur || '--:--'}</span>
                       </div>
                     </div>
                     <div>
                       <p className="text-[11px] text-orange-500 mb-1 font-medium uppercase tracking-wider">Selesai Lembur</p>
                       <div className="flex items-center gap-2">
                         <Clock size={14} className="text-orange-300" />
-                        <span className="font-semibold text-gray-900">{item.jam_keluar_lembur || '--:--'}</span>
+                        <span className="font-semibold text-[var(--text-primary)]">{item.jam_keluar_lembur || '--:--'}</span>
                       </div>
                     </div>
                   </>

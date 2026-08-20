@@ -52,17 +52,17 @@ export default function JamKerjaKantorFormClient({ initialData }: { initialData:
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Kolom Jam Masuk */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-700 border-b pb-2 mb-4">Jam Masuk</h3>
+          <h3 className="font-semibold text-[var(--text-primary)] border-b pb-2 mb-4">Jam Masuk</h3>
           {days.map((day) => (
             <div key={`masuk_${day.key}`} className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
+              <label className="text-sm font-medium text-[var(--text-primary)] mb-1">
                 {day.label}
               </label>
               <input
                 type="time"
                 name={`jam_masuk_${day.key}`}
                 defaultValue={initialData[`jam_masuk_${day.key}`]}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors"
+                className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors"
               />
             </div>
           ))}
@@ -70,17 +70,17 @@ export default function JamKerjaKantorFormClient({ initialData }: { initialData:
 
         {/* Kolom Jam Pulang */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-700 border-b pb-2 mb-4">Jam Pulang</h3>
+          <h3 className="font-semibold text-[var(--text-primary)] border-b pb-2 mb-4">Jam Pulang</h3>
           {days.map((day) => (
             <div key={`pulang_${day.key}`} className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
+              <label className="text-sm font-medium text-[var(--text-primary)] mb-1">
                 {day.label}
               </label>
               <input
                 type="time"
                 name={`jam_pulang_${day.key}`}
                 defaultValue={initialData[`jam_pulang_${day.key}`]}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors"
+                className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors"
               />
             </div>
           ))}

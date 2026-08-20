@@ -73,13 +73,13 @@ export default function PengajuanPage() {
           {/* Section: Jenis Pengajuan */}
           <div className="bg-white rounded-xl overflow-hidden shadow-sm">
             <div className="p-4 border-b border-gray-100">
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Jenis Pengajuan</label>
+              <label className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2 block">Jenis Pengajuan</label>
               <div className="relative">
                 <select 
                   name="jenis_pengajuan" 
                   value={formData.jenis_pengajuan}
                   onChange={handleChange}
-                  className="w-full bg-transparent text-gray-900 text-[17px] outline-none appearance-none font-medium"
+                  className="w-full bg-transparent text-[var(--text-primary)] text-[17px] outline-none appearance-none font-medium"
                 >
                   <option value="ijin">Ijin / Keperluan Pribadi</option>
                   <option value="sakit">Sakit</option>
@@ -95,13 +95,13 @@ export default function PengajuanPage() {
             <div className="p-4 border-b border-gray-100 flex items-center gap-3">
               <Calendar size={20} className="text-[#007AFF]" />
               <div className="flex-1">
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">Tanggal</label>
+                <label className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider block">Tanggal</label>
                 <input 
                   type="date" 
                   name="tanggal_pengajuan"
                   value={formData.tanggal_pengajuan}
                   onChange={handleChange}
-                  className="w-full text-gray-900 text-[17px] outline-none bg-transparent"
+                  className="w-full text-[var(--text-primary)] text-[17px] outline-none bg-transparent"
                   required
                 />
               </div>
@@ -110,13 +110,13 @@ export default function PengajuanPage() {
             <div className="p-4 flex items-center gap-3">
               <Clock size={20} className="text-[#007AFF]" />
               <div className="flex-1">
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider block">Jam</label>
+                <label className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider block">Jam</label>
                 <input 
                   type="time" 
                   name="jam_pengajuan"
                   value={formData.jam_pengajuan}
                   onChange={handleChange}
-                  className="w-full text-gray-900 text-[17px] outline-none bg-transparent"
+                  className="w-full text-[var(--text-primary)] text-[17px] outline-none bg-transparent"
                   required
                 />
               </div>
@@ -125,7 +125,7 @@ export default function PengajuanPage() {
 
           {/* Section: Keterangan */}
           <div className="bg-white rounded-xl overflow-hidden shadow-sm p-4">
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block flex items-center gap-1">
+            <label className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2 block flex items-center gap-1">
               <FileText size={14} /> Detail Keterangan / Alasan
             </label>
             <textarea 
@@ -134,7 +134,7 @@ export default function PengajuanPage() {
               onChange={handleChange}
               rows={4}
               placeholder="Tuliskan alasan pengajuan Anda di sini..."
-              className="w-full text-gray-900 placeholder:text-gray-400 text-[16px] outline-none bg-transparent resize-none pt-2"
+              className="w-full text-[var(--text-primary)] placeholder:text-gray-400 text-[16px] outline-none bg-transparent resize-none pt-2"
               required
             ></textarea>
           </div>

@@ -21,10 +21,10 @@ export default async function AdminTipeJadwalFormPage({
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">
           {isEdit ? "Edit Tipe Jadwal" : "Tambah Tipe Jadwal Baru"}
         </h1>
-        <p className="text-gray-500 mt-1">
+        <p className="text-[var(--text-muted)] mt-1">
           {isEdit 
             ? "Perbarui informasi nama tipe jadwal." 
             : "Tambahkan opsi tipe jadwal baru ke dalam sistem."}

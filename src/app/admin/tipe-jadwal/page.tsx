@@ -15,8 +15,8 @@ export default async function AdminTipeJadwalPage() {
     <div className="max-w-4xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Master Tipe Jadwal</h1>
-          <p className="text-gray-500 mt-1">Kelola data tipe jadwal (Kantor, Satpam, dsb) untuk penugasan pegawai.</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Master Tipe Jadwal</h1>
+          <p className="text-[var(--text-muted)] mt-1">Kelola data tipe jadwal (Kantor, Satpam, dsb) untuk penugasan pegawai.</p>
         </div>
         <Link href="/admin/tipe-jadwal/form" className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors">
           <Plus className="w-5 h-5" />
@@ -24,11 +24,11 @@ export default async function AdminTipeJadwalPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-sm font-semibold text-gray-600">
+              <tr className="bg-[var(--bg-card)] border-b border-[var(--border)] text-sm font-semibold text-[var(--text-secondary)]">
                 <th className="px-6 py-4">No</th>
                 <th className="px-6 py-4">Nama Tipe Jadwal</th>
                 <th className="px-6 py-4 text-center">Aksi</th>
@@ -37,7 +37,7 @@ export default async function AdminTipeJadwalPage() {
             <tbody className="divide-y divide-gray-100 text-sm">
               {tipeJadwals.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={3} className="px-6 py-8 text-center text-[var(--text-muted)]">
                     Belum ada data tipe jadwal.
                   </td>
                 </tr>
@@ -46,9 +46,9 @@ export default async function AdminTipeJadwalPage() {
                   let settingUrl = `/admin/tipe-jadwal/${item.id}/aturan`;
                   
                   return (
-                    <tr key={item.id} className="hover:bg-gray-50/50">
+                    <tr key={item.id} className="hover:bg-[var(--bg-card)]/50">
                       <td className="px-6 py-4 w-16">{idx + 1}</td>
-                      <td className="px-6 py-4 font-medium text-gray-800">{item.nama_tipe}</td>
+                      <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{item.nama_tipe}</td>
                       <td className="px-6 py-4 text-center flex justify-center gap-2">
                         <Link 
                           href={settingUrl} 

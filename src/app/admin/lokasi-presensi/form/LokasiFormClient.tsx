@@ -10,7 +10,7 @@ import { Save, ArrowLeft } from "lucide-react";
 // Load map component dynamically to avoid SSR issues with Leaflet
 const MapPicker = dynamic(() => import("@/components/MapPicker"), {
   ssr: false,
-  loading: () => <div className="w-full h-[400px] bg-gray-100 flex items-center justify-center rounded-lg border border-gray-300">Memuat Peta...</div>
+  loading: () => <div className="w-full h-[400px] bg-gray-100 flex items-center justify-center rounded-lg border border-[var(--border)]">Memuat Peta...</div>
 });
 
 type LokasiFormClientProps = {
@@ -80,7 +80,7 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
   const radiusNum = parseInt(String(formData.radius)) || 0;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+    <div className="bg-[var(--bg-surface)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden p-6">
       {error && (
         <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
           {error}
@@ -90,7 +90,7 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Nama Lokasi</label>
+            <label className="text-sm font-medium text-[var(--text-primary)]">Nama Lokasi</label>
             <input 
               type="text" 
               name="nama_lokasi" 
@@ -98,12 +98,12 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
               onChange={handleChange}
               required
               placeholder="Cth: Kantor Pusat, Cabang Utara"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
+              className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
             />
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Alamat Lokasi / Nama Event</label>
+            <label className="text-sm font-medium text-[var(--text-primary)]">Alamat Lokasi / Nama Event</label>
             <input 
               type="text" 
               name="alamat_lokasi" 
@@ -111,12 +111,12 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
               onChange={handleChange}
               required
               placeholder="Alamat lengkap lokasi"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
+              className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
             />
           </div>
           
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Latitude</label>
+            <label className="text-sm font-medium text-[var(--text-primary)]">Latitude</label>
             <input 
               type="text" 
               name="latitude" 
@@ -124,12 +124,12 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
               onChange={handleChange}
               required
               placeholder="Latitude"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
+              className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Longitude</label>
+            <label className="text-sm font-medium text-[var(--text-primary)]">Longitude</label>
             <input 
               type="text" 
               name="longitude" 
@@ -137,12 +137,12 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
               onChange={handleChange}
               required
               placeholder="Longitude"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
+              className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
             />
           </div>
           
           <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Radius (Meter)</label>
+            <label className="text-sm font-medium text-[var(--text-primary)]">Radius (Meter)</label>
             <input 
               type="number" 
               name="radius" 
@@ -151,14 +151,14 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
               required
               min="1"
               placeholder="Cth: 50"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
+              className="w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition-all"
             />
-            <p className="text-xs text-gray-500">Jarak toleransi maksimal dari titik koordinat untuk melakukan presensi.</p>
+            <p className="text-xs text-[var(--text-muted)]">Jarak toleransi maksimal dari titik koordinat untuk melakukan presensi.</p>
           </div>
           
           <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Pilih Titik di Peta</label>
-            <p className="text-xs text-gray-500 mb-2">Klik pada peta untuk mengatur koordinat latitude dan longitude. Lingkaran biru menunjukkan radius presensi.</p>
+            <label className="text-sm font-medium text-[var(--text-primary)]">Pilih Titik di Peta</label>
+            <p className="text-xs text-[var(--text-muted)] mb-2">Klik pada peta untuk mengatur koordinat latitude dan longitude. Lingkaran biru menunjukkan radius presensi.</p>
             <MapPicker 
               position={[latNum, lngNum]} 
               radius={radiusNum} 
@@ -167,10 +167,10 @@ export default function LokasiFormClient({ initialData, isEdit }: LokasiFormClie
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-100">
+        <div className="flex items-center justify-end gap-3 pt-6 border-t border-[var(--border)]">
           <Link 
             href="/admin/lokasi-presensi" 
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 font-medium"
+            className="px-6 py-2 border border-[var(--border)] text-[var(--text-primary)] rounded-lg hover:bg-[var(--bg-card)] transition-colors flex items-center gap-2 font-medium"
           >
             <ArrowLeft className="w-4 h-4" /> Batal
           </Link>
