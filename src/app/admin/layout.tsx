@@ -11,8 +11,8 @@ export default async function AdminLayout({
 }) {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user.role !== "admin") {
-    redirect("/login");
+  if (!session || session.user.role !== "admin" && session.user.role !== "superadmin") {
+    redirect("http://localhost:3001/login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fadmin%2Fpresensi");
   }
 
   return (
@@ -25,7 +25,14 @@ export default async function AdminLayout({
         
         <AdminSidebarNav />
         
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200 flex flex-col gap-2">
+          <a 
+            href="http://localhost:3001"
+            className="flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
+          >
+            <i className="fas fa-th-large text-gray-400"></i>
+            Kembali ke Portal
+          </a>
           <LogoutButton />
         </div>
       </aside>

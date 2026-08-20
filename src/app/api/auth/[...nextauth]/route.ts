@@ -25,7 +25,8 @@ export const authOptions: NextAuthOptions = {
                 nik: true,
                 jabatan: true,
                 lokasi_presensi: true,
-                foto: true
+                foto: true,
+                tipe_jadwal: true
               }
             }
           }
@@ -53,7 +54,8 @@ export const authOptions: NextAuthOptions = {
           nik: user.pegawai?.nik,
           jabatan: user.pegawai?.jabatan,
           lokasi_presensi: user.pegawai?.lokasi_presensi,
-          foto: user.pegawai?.foto
+          foto: user.pegawai?.foto,
+          tipe_jadwal: user.pegawai?.tipe_jadwal
         };
       }
     })
@@ -67,6 +69,7 @@ export const authOptions: NextAuthOptions = {
         token.jabatan = user.jabatan;
         token.lokasi_presensi = user.lokasi_presensi;
         token.foto = user.foto;
+        token.tipe_jadwal = user.tipe_jadwal;
       }
       return token;
     },
@@ -74,16 +77,39 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.role = token.role as string;
         session.user.id_pegawai = token.id_pegawai as number;
-        session.user.nik = token.nik as string;
-        session.user.jabatan = token.jabatan as string;
-        session.user.lokasi_presensi = token.lokasi_presensi as string;
-        session.user.foto = token.foto as string;
+
+        // If logged in via SSO (Portal), fetch pegawai data from DB
+        if (!token.nik && token.id_pegawai) {
+          const userPegawai = await prisma.pegawai.findUnique({
+            where: { id: token.id_pegawai as number },
+            select: { nik: true, jabatan: true, lokasi_presensi: true, foto: true, tipe_jadwal: true }
+          });
+          if (userPegawai) {
+            session.user.nik = userPegawai.nik;
+            session.user.jabatan = userPegawai.jabatan;
+            session.user.lokasi_presensi = userPegawai.lokasi_presensi;
+            session.user.foto = userPegawai.foto;
+            session.user.tipe_jadwal = userPegawai.tipe_jadwal;
+          }
+        } else {
+          session.user.nik = token.nik as string;
+          session.user.jabatan = token.jabatan as string;
+          session.user.lokasi_presensi = token.lokasi_presensi as string;
+          session.user.foto = token.foto as string;
+          session.user.tipe_jadwal = token.tipe_jadwal as string;
+        }
       }
       return session;
+    },
+    // Allow cross-port callback (back to localhost:3001 after portal SSO login)
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("http://localhost:")) return url;
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      return baseUrl;
     }
   },
   pages: {
-    signIn: "/login",
+    signIn: "http://localhost:3001/login",
   },
   session: {
     strategy: "jwt",

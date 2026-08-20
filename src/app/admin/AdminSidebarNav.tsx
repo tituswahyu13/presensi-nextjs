@@ -14,11 +14,7 @@ export default function AdminSidebarNav() {
 
   const navItems = [
     { name: "Rekap Presensi", href: "/admin/presensi", icon: FileText },
-    { name: "Data Pegawai", href: "/admin/pegawai", icon: Users },
     { name: "Lokasi Presensi", href: "/admin/lokasi-presensi", icon: MapPin },
-    { name: "Divisi (Bagian)", href: "/admin/bagian", icon: Building2 },
-    { name: "Daftar Jabatan", href: "/admin/jabatan", icon: Briefcase },
-    { name: "Struktur Organisasi", href: "/admin/struktur", icon: Network },
   ];
 
   return (

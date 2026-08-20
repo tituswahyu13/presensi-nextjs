@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { Home, Clock, User, LogOut } from "lucide-react";
+import { Home, Clock, User, LogOut, LayoutGrid } from "lucide-react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
@@ -47,12 +47,22 @@ export default function PegawaiLayout({ children }: { children: React.ReactNode 
             </h2>
           </div>
         </div>
-        <button 
-          onClick={() => signOut({ callbackUrl: '/login' })}
-          className="h-8 w-8 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors"
-        >
-          <LogOut size={20} />
-        </button>
+        <div className="flex items-center gap-2">
+          <Link 
+            href="http://localhost:3001"
+            className="h-8 w-8 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+            title="Kembali ke Portal"
+          >
+            <LayoutGrid size={20} />
+          </Link>
+          <button 
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            className="h-8 w-8 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 transition-colors"
+            title="Keluar"
+          >
+            <LogOut size={20} />
+          </button>
+        </div>
       </header>
 
       {/* Main Content Area */}
