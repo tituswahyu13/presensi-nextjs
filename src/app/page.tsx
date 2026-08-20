@@ -6,7 +6,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("http://localhost:3000/login?callbackUrl=http%3A%2F%2Flocalhost%3A3001");
   }
 
   // Admin/Superadmin diarahkan ke halaman admin presensi

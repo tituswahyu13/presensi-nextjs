@@ -109,7 +109,7 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages: {
-    signIn: "http://localhost:3001/login",
+    signIn: "http://localhost:3000/login",
   },
   session: {
     strategy: "jwt",

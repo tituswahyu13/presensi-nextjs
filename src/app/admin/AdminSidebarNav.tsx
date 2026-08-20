@@ -2,104 +2,79 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, FileText, Briefcase, Building2, Network, MapPin, Clock, ChevronDown, ChevronRight, CalendarDays, ListOrdered } from "lucide-react";
+import { FileText, MapPin, Clock, CalendarDays, ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 export default function AdminSidebarNav() {
   const pathname = usePathname();
-  // Expanded logic for jamKerjaOpen to include tipe-jadwal
   const [jamKerjaOpen, setJamKerjaOpen] = useState(
     pathname.startsWith("/admin/jam-kerja") || pathname.startsWith("/admin/tipe-jadwal")
   );
 
   const navItems = [
-    { name: "Rekap Presensi", href: "/admin/presensi", icon: FileText },
-    { name: "Lokasi Presensi", href: "/admin/lokasi-presensi", icon: MapPin },
+    { name: "Rekap Presensi", href: "/admin/presensi", icon: FileText, color: "var(--accent)" },
+    { name: "Lokasi Presensi", href: "/admin/lokasi-presensi", icon: MapPin, color: "#34d399" },
   ];
 
+  const isJamKerjaActive = pathname.startsWith("/admin/jam-kerja") || pathname.startsWith("/admin/tipe-jadwal");
+
   return (
-    <nav className="flex-1 p-4 space-y-2">
+    <nav className="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
+      <p className="px-3 text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>Presensi</p>
+
       {navItems.map((item) => {
         const isActive = pathname.startsWith(item.href);
         const Icon = item.icon;
-        
         return (
-          <Link 
-            key={item.href} 
-            href={item.href} 
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
-              isActive 
-                ? "bg-cyan-50 text-cyan-700" 
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
-          >
-            <Icon className="w-5 h-5" />
+          <Link key={item.href} href={item.href}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            style={{
+              background: isActive ? "var(--accent-muted)" : "transparent",
+              color: isActive ? "var(--accent)" : "var(--text-secondary)",
+              borderLeft: isActive ? "2px solid var(--accent)" : "2px solid transparent",
+            }}>
+            <Icon className="w-4 h-4 shrink-0" style={{ color: isActive ? "var(--accent)" : item.color }} />
             {item.name}
           </Link>
         );
       })}
 
-      <div className="pt-2">
-        <button 
-          onClick={() => setJamKerjaOpen(!jamKerjaOpen)}
-          className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium transition-colors ${
-            (pathname.startsWith("/admin/jam-kerja") || pathname.startsWith("/admin/tipe-jadwal")) 
-              ? "bg-cyan-50 text-cyan-700" 
-              : "text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5" />
-            <span>Manajemen Jam Kerja</span>
-          </div>
-          {jamKerjaOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-        </button>
+      {/* Jam Kerja Group */}
+      <p className="px-3 text-xs font-semibold uppercase tracking-wider mt-4 mb-1" style={{ color: "var(--text-muted)" }}>Pengaturan</p>
+      <button onClick={() => setJamKerjaOpen(!jamKerjaOpen)}
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+        style={{
+          background: isJamKerjaActive ? "var(--accent-muted)" : "transparent",
+          color: isJamKerjaActive ? "var(--accent)" : "var(--text-secondary)",
+          borderLeft: isJamKerjaActive ? "2px solid var(--accent)" : "2px solid transparent",
+        }}>
+        <span className="flex items-center gap-3">
+          <Clock className="w-4 h-4" style={{ color: isJamKerjaActive ? "var(--accent)" : "#fbbf24" }} />
+          Jam Kerja
+        </span>
+        {jamKerjaOpen
+          ? <ChevronDown className="w-3.5 h-3.5" />
+          : <ChevronRight className="w-3.5 h-3.5" />}
+      </button>
 
-        {jamKerjaOpen && (
-          <div className="mt-1 ml-4 pl-4 border-l-2 border-gray-100 space-y-1">
-            <Link 
-              href="/admin/tipe-jadwal" 
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                pathname.startsWith("/admin/tipe-jadwal") ? "bg-cyan-50 text-cyan-700" : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <ListOrdered className="w-4 h-4" /> Master Tipe Jadwal
-            </Link>
-            <Link 
-              href="/admin/jam-kerja/penugasan-shift" 
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                pathname.startsWith("/admin/jam-kerja/penugasan-shift") ? "bg-cyan-50 text-cyan-700" : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <CalendarDays className="w-4 h-4" /> Penugasan Shift
-            </Link>
-            <Link 
-              href="/admin/jam-kerja/kantor" 
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors opacity-50 ${
-                pathname === "/admin/jam-kerja/kantor" ? "bg-cyan-50 text-cyan-700" : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <Building2 className="w-4 h-4" /> Jam Kerja Kantor (Lama)
-            </Link>
-            <Link 
-              href="/admin/jam-kerja/shift" 
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors opacity-50 ${
-                pathname === "/admin/jam-kerja/shift" ? "bg-cyan-50 text-cyan-700" : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <Clock className="w-4 h-4" /> Jam Kerja Shift (Lama)
-            </Link>
-            <Link 
-              href="/admin/jam-kerja/jadwal-sumber" 
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors opacity-50 ${
-                pathname === "/admin/jam-kerja/jadwal-sumber" ? "bg-cyan-50 text-cyan-700" : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-              }`}
-            >
-              <CalendarDays className="w-4 h-4" /> Jadwal Sumber (Lama)
-            </Link>
-          </div>
-        )}
-      </div>
+      {jamKerjaOpen && (
+        <div className="ml-4 space-y-0.5 border-l pl-3" style={{ borderColor: "var(--border)" }}>
+          {[
+            { name: "Manajemen Jam Kerja", href: "/admin/jam-kerja" },
+            { name: "Tipe Jadwal", href: "/admin/tipe-jadwal" },
+          ].map(sub => {
+            const isActive = pathname.startsWith(sub.href);
+            return (
+              <Link key={sub.href} href={sub.href}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors"
+                style={{ color: isActive ? "var(--accent)" : "var(--text-secondary)", background: isActive ? "var(--accent-muted)" : "transparent" }}>
+                <CalendarDays className="w-3.5 h-3.5" />
+                {sub.name}
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </nav>
   );
 }
