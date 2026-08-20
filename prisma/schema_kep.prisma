@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/@prisma/client_kep"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("KEPEGAWAIAN_DATABASE_URL")
+}
+
+model bagian {
+  id         Int     @id @default(autoincrement())
+  bagian     String  @db.VarChar(100)
+  parent_id  Int?
+  is_deleted Boolean @default(false)
+
+  @@index([parent_id], map: "bagian_parent_id_fkey")
+}
+
+model jabatan {
+  id         Int      @id @default(autoincrement())
+  jabatan    String?  @db.VarChar(255)
+  id_bagian  Int?
+  is_kepala  Boolean? @default(false)
+  is_deleted Boolean  @default(false)
+
+  @@index([id_bagian], map: "jabatan_id_bagian_fkey")
+}
+
+model pegawai {
+  id              Int       @id @default(autoincrement())
+  nik             String?   @db.VarChar(7)
+  nama            String?   @db.VarChar(50)
+  alamat          String?   @db.VarChar(255)
+  jabatan         String?   @db.VarChar(50)
+  id_bagian       Int?
+  id_jabatan      Int?
+  lokasi_presensi String?   @db.VarChar(255)
+  foto            String?   @db.VarChar(255)
+  ttl             String?   @db.Text
+  lahir           DateTime? @default(dbgenerated("('0000-00-00')")) @db.Date
+  mulai_kerja     DateTime? @default(dbgenerated("('0000-00-00')")) @db.Date
+  agama           String?   @db.VarChar(50)
+  pendidikan      String?   @db.VarChar(50)
+  golongan        String?   @db.VarChar(50)
+  pensiun         DateTime? @db.Date
+  gol_dar         String?   @db.VarChar(50)
+  bagian          String?   @db.VarChar(50)
+  lokasi_event    String?   @db.VarChar(100)
+  ruang           String?   @db.VarChar(2)
+  is_deleted      Boolean   @default(false)
+  tipe_jadwal     String?   @default("Kantor") @db.VarChar(50)
+  id_lokasi       Int?
+  id_tipe_jadwal  Int?
+
+  @@index([id_bagian], map: "pegawai_id_bagian_fkey")
+  @@index([id_jabatan], map: "pegawai_id_jabatan_fkey")
+  @@index([id_lokasi], map: "pegawai_id_lokasi_fkey")
+  @@index([id_tipe_jadwal], map: "pegawai_id_tipe_jadwal_fkey")
+}

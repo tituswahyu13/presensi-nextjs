@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, prismaKep } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getJadwalSumberData(year: number, month: number, id_tipe_jadwal?: number) {
@@ -18,7 +18,7 @@ export async function getJadwalSumberData(year: number, month: number, id_tipe_j
   const activeTipeId = id_tipe_jadwal || (tipeJadwalList.length > 0 ? tipeJadwalList[0].id : undefined);
 
   // Get employees with that tipe jadwal
-  const pegawais = await prisma.pegawai.findMany({
+  const pegawais = await prismaKep.pegawai.findMany({
     where: { 
       is_deleted: false,
       id_tipe_jadwal: activeTipeId

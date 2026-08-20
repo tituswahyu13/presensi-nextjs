@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, prismaKep } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 
@@ -19,7 +19,7 @@ type PegawaiInput = {
 
 export async function createPegawai(data: PegawaiInput) {
   try {
-    const existing = await prisma.pegawai.findFirst({ where: { nik: data.nik, is_deleted: false } });
+    const existing = await prismaKep.pegawai.findFirst({ where: { nik: data.nik, is_deleted: false } });
     if (existing) return { success: false, message: "NIK sudah terdaftar!" };
 
     const hashedPassword = await bcrypt.hash(data.nik, 10);
@@ -60,7 +60,7 @@ export async function createPegawai(data: PegawaiInput) {
 
 export async function updatePegawai(id: number, data: PegawaiInput) {
   try {
-    await prisma.pegawai.update({ where: { id }, data });
+    await prismaKep.pegawai.update({ where: { id }, data });
     await prisma.users.updateMany({ where: { id_pegawai: id }, data: { username: data.nik } });
     revalidatePath("/admin/pegawai");
     return { success: true, message: "Berhasil diperbarui" };
@@ -71,7 +71,7 @@ export async function updatePegawai(id: number, data: PegawaiInput) {
 
 export async function deletePegawai(id: number) {
   try {
-    await prisma.pegawai.update({ where: { id }, data: { is_deleted: true } });
+    await prismaKep.pegawai.update({ where: { id }, data: { is_deleted: true } });
     revalidatePath("/admin/pegawai");
     return { success: true, message: "Pegawai dihapus" };
   } catch (error) {

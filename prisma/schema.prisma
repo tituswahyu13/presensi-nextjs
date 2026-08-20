@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
@@ -8,76 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id                 Int                  @id @default(autoincrement())
-  id_pegawai         Int?
-  username           String?              @db.VarChar(50)
-  password           String?              @db.VarChar(255)
-  status             String?              @db.VarChar(50)
-  role               String?              @db.VarChar(50)
-  ruang              String?              @db.VarChar(2)
-  remember_me_tokens remember_me_tokens[]
-  pegawai            pegawai?             @relation(fields: [id_pegawai], references: [id], onDelete: Cascade, map: "FK_users_pegawai")
-
-  @@index([id_pegawai], map: "FK_users_pegawai")
-}
-
-model remember_me_tokens {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  token      String   @unique(map: "token") @db.VarChar(64)
-  expires_at DateTime @db.DateTime(0)
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "FK_remember_me_users")
-
-  @@index([user_id], map: "FK_remember_me_users")
-}
-
-model modules {
-  id                 Int                  @id @default(autoincrement())
-  nama_modul         String               @db.VarChar(100)
-  kode_modul         String               @unique @db.VarChar(50)
-  url                String               @db.VarChar(255)
-  icon               String?              @db.VarChar(50)
-  role_module_access role_module_access[]
-}
-
-model role_module_access {
-  id       Int     @id @default(autoincrement())
-  role     String  @db.VarChar(50)
-  id_modul Int
-  modules  modules @relation(fields: [id_modul], references: [id], onDelete: Cascade, map: "FK_role_module")
-
-  @@unique([role, id_modul], map: "UK_role_modul")
-}
-
-model bagian {
-  id         Int       @id @default(autoincrement())
-  bagian     String    @db.VarChar(100)
-  parent_id  Int?
-  is_deleted Boolean   @default(false)
-  parent     bagian?   @relation("BagianToBagian", fields: [parent_id], references: [id])
-  children   bagian[]  @relation("BagianToBagian")
-  jabatan    jabatan[]
-  pegawai   pegawai[]
-}
-
-model jabatan {
-  id         Int       @id @default(autoincrement())
-  jabatan    String?   @db.VarChar(255)
-  id_bagian  Int?
-  is_kepala  Boolean?  @default(false)
-  is_deleted Boolean   @default(false)
-  bagian     bagian?   @relation(fields: [id_bagian], references: [id], onDelete: SetNull)
-  pegawai    pegawai[]
-}
-
 model jadwal_satpam {
   id         Int      @id @default(autoincrement())
   id_pegawai Int
   tanggal    DateTime @db.Date
   shift      String   @db.VarChar(1)
-  pegawai    pegawai  @relation(fields: [id_pegawai], references: [id], onUpdate: Restrict, map: "jadwal_satpam_ibfk_1")
 
   @@unique([id_pegawai, tanggal], map: "unique_jadwal")
 }
@@ -87,7 +21,6 @@ model jadwal_sumber {
   id_pegawai Int
   tanggal    DateTime @db.Date
   shift      String   @db.VarChar(1)
-  pegawai    pegawai  @relation(fields: [id_pegawai], references: [id], onUpdate: Restrict, map: "fk_pegawai_jadwal_sumber")
 
   @@unique([id_pegawai, tanggal], map: "unique_jadwal")
 }
@@ -137,82 +70,43 @@ model lokasi_presensi {
   jam_pulang_minggu DateTime? @db.Time(0)
   map               String?   @db.Text
   is_deleted        Boolean   @default(false)
-  pegawai           pegawai[]
-}
-
-model pegawai {
-  id              Int             @id @default(autoincrement())
-  nik             String?         @db.VarChar(7)
-  nama            String?         @db.VarChar(50)
-  alamat          String?         @db.VarChar(255)
-  jabatan         String?         @db.VarChar(50)
-  id_bagian       Int?
-  id_jabatan      Int?
-  lokasi_presensi String?         @db.VarChar(255)
-  foto            String?         @db.VarChar(255)
-  ttl             String?         @db.Text
-  lahir           DateTime?       @default(dbgenerated("('0000-00-00')")) @db.Date
-  mulai_kerja     DateTime?       @default(dbgenerated("('0000-00-00')")) @db.Date
-  agama           String?         @db.VarChar(50)
-  pendidikan      String?         @db.VarChar(50)
-  golongan        String?         @db.VarChar(50)
-  pensiun         DateTime?       @db.Date
-  gol_dar         String?         @db.VarChar(50)
-  bagian          String?         @db.VarChar(50)
-  lokasi_event    String?         @db.VarChar(100)
-  ruang           String?         @db.VarChar(2)
-  jadwal_satpam   jadwal_satpam[]
-  jadwal_sumber   jadwal_sumber[]
-  penugasan_shift penugasan_shift[]
-  users           users[]
-  presensi        presensi[]
-  bagian_rel      bagian?         @relation(fields: [id_bagian], references: [id], onDelete: SetNull)
-  jabatan_rel     jabatan?        @relation(fields: [id_jabatan], references: [id], onDelete: SetNull)
-  is_deleted      Boolean         @default(false)
-  tipe_jadwal     String?         @default("Kantor") @db.VarChar(50)
-  id_lokasi       Int?
-  id_tipe_jadwal  Int?
-  lokasi_rel      lokasi_presensi? @relation(fields: [id_lokasi], references: [id], onDelete: SetNull)
-  tipe_jadwal_rel tipe_jadwal?     @relation(fields: [id_tipe_jadwal], references: [id], onDelete: SetNull)
 }
 
 model tipe_jadwal {
-  id                Int       @id @default(autoincrement())
-  nama_tipe         String    @db.VarChar(50)
-  jenis_konfigurasi String?   @default("Kantor") @db.VarChar(50)
-  is_deleted        Boolean   @default(false)
-  pegawai           pegawai[]
+  id                Int              @id @default(autoincrement())
+  nama_tipe         String           @db.VarChar(50)
+  jenis_konfigurasi String?          @default("Kantor") @db.VarChar(50)
+  is_deleted        Boolean          @default(false)
   jam_kerja_tipe    jam_kerja_tipe[]
 }
 
 model jam_kerja_tipe {
   id              Int               @id @default(autoincrement())
   id_tipe_jadwal  Int
-  tipe_hari       String            @db.VarChar(50) 
-  jam_masuk       String            @db.VarChar(10) 
-  jam_pulang      String            @db.VarChar(10) 
+  tipe_hari       String            @db.VarChar(50)
+  jam_masuk       String            @db.VarChar(10)
+  jam_pulang      String            @db.VarChar(10)
   is_shift        Boolean           @default(false)
-  
   tipe_jadwal     tipe_jadwal       @relation(fields: [id_tipe_jadwal], references: [id], onDelete: Cascade)
   penugasan_shift penugasan_shift[]
+
+  @@index([id_tipe_jadwal], map: "jam_kerja_tipe_id_tipe_jadwal_fkey")
 }
 
 model penugasan_shift {
-  id                Int             @id @default(autoincrement())
+  id                Int            @id @default(autoincrement())
   id_pegawai        Int
   id_jam_kerja_tipe Int
-  tanggal           DateTime        @db.Date
-  
-  pegawai           pegawai         @relation(fields: [id_pegawai], references: [id], onDelete: Cascade)
-  jam_kerja_tipe    jam_kerja_tipe  @relation(fields: [id_jam_kerja_tipe], references: [id], onDelete: Cascade)
+  tanggal           DateTime       @db.Date
+  jam_kerja_tipe    jam_kerja_tipe @relation(fields: [id_jam_kerja_tipe], references: [id], onDelete: Cascade)
 
   @@unique([id_pegawai, tanggal])
+  @@index([id_jam_kerja_tipe], map: "penugasan_shift_id_jam_kerja_tipe_fkey")
 }
 
 model presensi {
   id                Int       @default(autoincrement())
   id_pegawai        Int
-  pegawai           pegawai   @relation(fields: [id_pegawai], references: [id], onDelete: Cascade, onUpdate: Restrict)
   tanggal_masuk     DateTime  @db.Date
   jam_masuk         DateTime? @db.Time(0)
   jam_masuk_kantor  DateTime? @db.Time(0)
@@ -228,6 +122,7 @@ model presensi {
   is_lembur         Boolean   @default(false)
 
   @@id([id, id_pegawai, tanggal_masuk])
+  @@index([id_pegawai], map: "presensi_id_pegawai_fkey")
 }
 
 model presensi_deleted {
@@ -272,4 +167,3 @@ model shift {
   masuk_i  DateTime? @db.Time(0)
   pulang_i DateTime? @db.Time(0)
 }
-

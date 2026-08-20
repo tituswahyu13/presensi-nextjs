@@ -38,3 +38,8 @@ body {
 .logout-btn:hover { background: rgba(239,68,68,0.1); }
 input:focus { border-color: var(--accent) !important; outline: none; }
 
+
+/* Minimalist Lucide Icons */
+svg.lucide {
+  stroke-width: 1.25px !important;
+}

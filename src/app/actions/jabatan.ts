@@ -1,11 +1,11 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, prismaKep } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function createJabatan(data: any) {
   try {
-    await prisma.jabatan.create({
+    await prismaKep.jabatan.create({
       data: {
         jabatan: data.jabatan,
         id_bagian: data.id_bagian ? parseInt(data.id_bagian) : null,
@@ -21,7 +21,7 @@ export async function createJabatan(data: any) {
 
 export async function updateJabatan(id: number, data: any) {
   try {
-    await prisma.jabatan.update({
+    await prismaKep.jabatan.update({
       where: { id },
       data: {
         jabatan: data.jabatan,
@@ -38,7 +38,7 @@ export async function updateJabatan(id: number, data: any) {
 
 export async function deleteJabatan(id: number) {
   try {
-    await prisma.jabatan.update({
+    await prismaKep.jabatan.update({
       where: { id },
       data: { is_deleted: true },
     });

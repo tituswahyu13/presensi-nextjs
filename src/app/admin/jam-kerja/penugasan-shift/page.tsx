@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma, prismaKep } from "@/lib/prisma";
 import PenugasanShiftClient from "./PenugasanShiftClient";
 import { CalendarDays } from "lucide-react";
 
@@ -50,7 +50,7 @@ export default async function PenugasanShiftPage({
     });
 
     // Get pegawais in this tipe
-    pegawais = await prisma.pegawai.findMany({
+    pegawais = await prismaKep.pegawai.findMany({
       where: {
         is_deleted: false,
         id_tipe_jadwal: activeTipeId

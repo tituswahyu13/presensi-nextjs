@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma, prismaKep } from "@/lib/prisma";
 import FilterPanel from "./FilterPanel";
 
 export const dynamic = 'force-dynamic';
@@ -14,33 +14,35 @@ export default async function AdminPresensiPage({
   const filterBagian = typeof resolvedParams.bagian === 'string' ? resolvedParams.bagian : '';
 
   // Get list of 'Bagian' for the dropdown
-  const bagianList = await prisma.bagian.findMany({
+  const bagianList = await prismaKep.bagian.findMany({
     orderBy: { bagian: 'asc' }
   });
 
   // Query presensi
-  const presensiData = await prisma.presensi.findMany({
+  // Cross-database join (Microservices pattern)
+  const pegawaiFilter = filterBagian ? { bagian: filterBagian } : {};
+  const pegawais = await prismaKep.pegawai.findMany({
+    where: pegawaiFilter,
+    select: { id: true, nama: true, nik: true, bagian: true }
+  });
+  
+  const pegawaiIds = pegawais.map(p => p.id);
+
+  const presensiRaw = await prisma.presensi.findMany({
     where: {
       tanggal_masuk: new Date(dateStr),
-      ...(filterBagian ? {
-        pegawai: {
-          bagian: filterBagian
-        }
-      } : {})
-    },
-    include: {
-      pegawai: {
-        select: {
-          nama: true,
-          nik: true,
-          bagian: true
-        }
-      }
+      id_pegawai: { in: pegawaiIds }
     },
     orderBy: {
       jam_masuk: 'desc'
     }
   });
+
+  const pegawaiMap = new Map(pegawais.map(p => [p.id, p]));
+  const presensiData = presensiRaw.map(p => ({
+    ...p,
+    pegawai: pegawaiMap.get(p.id_pegawai as number) || null
+  }));
 
   return (
     <div className="max-w-6xl mx-auto">

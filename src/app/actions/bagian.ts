@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, prismaKep } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function createBagian(data: any) {
@@ -18,7 +18,7 @@ export async function createBagian(data: any) {
       ? data.jabatanList.filter((j: any) => j.id).map((j: any) => ({ id: parseInt(j.id) }))
       : [];
 
-    const newBagian = await prisma.bagian.create({
+    const newBagian = await prismaKep.bagian.create({
       data: {
         bagian: data.bagian,
         parent_id: parent_id,
@@ -31,7 +31,7 @@ export async function createBagian(data: any) {
 
     if (jabatanConnectData.length > 0) {
       for (const j of data.jabatanList.filter((j: any) => j.id)) {
-        await prisma.jabatan.update({
+        await prismaKep.jabatan.update({
           where: { id: parseInt(j.id) },
           data: { is_kepala: j.is_kepala }
         });
@@ -60,7 +60,7 @@ export async function updateBagian(id: number, data: any) {
     let newlyConnected: any[] = [];
 
     if (Array.isArray(data.jabatanList)) {
-      const existingJabatan = await prisma.jabatan.findMany({ where: { id_bagian: id } });
+      const existingJabatan = await prismaKep.jabatan.findMany({ where: { id_bagian: id } });
       const existingIds = existingJabatan.map(ej => ej.id);
       
       const incomingIds = data.jabatanList.filter((j: any) => j.id).map((j: any) => parseInt(j.id));
@@ -98,7 +98,7 @@ export async function updateBagian(id: number, data: any) {
       };
     }
 
-    await prisma.bagian.update({
+    await prismaKep.bagian.update({
       where: { id },
       data: {
         bagian: data.bagian,
@@ -109,7 +109,7 @@ export async function updateBagian(id: number, data: any) {
 
     if (newlyConnected.length > 0) {
       for (const j of newlyConnected) {
-        await prisma.jabatan.update({
+        await prismaKep.jabatan.update({
           where: { id: parseInt(j.id) },
           data: { is_kepala: j.is_kepala }
         });
@@ -126,7 +126,7 @@ export async function updateBagian(id: number, data: any) {
 
 export async function deleteBagian(id: number) {
   try {
-    await prisma.bagian.update({
+    await prismaKep.bagian.update({
       where: { id }, data: { is_deleted: true },
     });
     revalidatePath("/admin/bagian");
@@ -150,12 +150,12 @@ export async function updateBagianParent(id: number, newParentId: number | null)
         if (currentId === id) {
           return { success: false, message: "Siklus terdeteksi! Tidak dapat memindahkan divisi ini ke bawah bawahannya sendiri." };
         }
-        const record: any = await prisma.bagian.findUnique({ where: { id: currentId } });
+        const record: any = await prismaKep.bagian.findUnique({ where: { id: currentId } });
         currentId = record?.parent_id || null;
       }
     }
 
-    await prisma.bagian.update({
+    await prismaKep.bagian.update({
       where: { id },
       data: { parent_id: newParentId },
     });

@@ -1,6 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "@/lib/prisma";
+import { prisma, prismaKep } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
 
         // If logged in via SSO (Portal), fetch pegawai data from DB
         if (!token.nik && token.id_pegawai) {
-          const userPegawai = await prisma.pegawai.findUnique({
+          const userPegawai = await prismaKep.pegawai.findUnique({
             where: { id: token.id_pegawai as number },
             select: { nik: true, jabatan: true, lokasi_presensi: true, foto: true, tipe_jadwal: true }
           });
