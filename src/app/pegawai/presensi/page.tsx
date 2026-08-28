@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { ArrowLeft, MapPin, Loader2, Check, RefreshCcw, X } from "lucide-react";
@@ -26,7 +26,7 @@ import 'leaflet/dist/leaflet.css';
 // Leaflet default icon fix
 import L from 'leaflet';
 
-export default function PresensiPage() {
+function PresensiContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
@@ -536,5 +536,17 @@ export default function PresensiPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function PresensiPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F2F2F7] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-[#007AFF]" />
+      </div>
+    }>
+      <PresensiContent />
+    </Suspense>
   );
 }

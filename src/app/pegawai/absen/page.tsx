@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { MapPin, Camera, X, Check, Loader2, ArrowLeft } from "lucide-react";
@@ -18,7 +18,7 @@ import 'leaflet/dist/leaflet.css';
 // Leaflet default icon fix
 import L from 'leaflet';
 
-export default function AbsenPage() {
+function AbsenContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
@@ -264,5 +264,17 @@ export default function AbsenPage() {
         
       </main>
     </div>
+  );
+}
+
+export default function AbsenPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+      </div>
+    }>
+      <AbsenContent />
+    </Suspense>
   );
 }
