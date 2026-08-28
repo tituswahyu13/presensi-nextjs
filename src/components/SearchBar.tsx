@@ -41,7 +41,8 @@ export default function SearchBar({ placeholder = "Cari..." }: { placeholder?: s
   }, [pathname, router, searchParams]);
 
   useEffect(() => {
-    if (debouncedValue !== searchParams.get("q")) {
+    const currentQ = searchParams.get("q") || "";
+    if (debouncedValue !== currentQ) {
       handleSearch(debouncedValue);
     }
   }, [debouncedValue, handleSearch, searchParams]);
